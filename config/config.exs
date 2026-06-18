@@ -11,6 +11,14 @@ config :pauper_league,
   ecto_repos: [PauperLeague.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :pauper_league, Oban,
+  engine: Oban.Engines.Basic,
+  queues: [default: 10],
+  repo: PauperLeague.Repo,
+  plugins: [
+    {Oban.Plugins.Cron, crontab: []}
+  ]
+
 # Configures the endpoint
 config :pauper_league, PauperLeagueWeb.Endpoint,
   url: [host: "localhost"],

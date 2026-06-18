@@ -20,6 +20,8 @@ config :pauper_league, PauperLeagueWeb.Endpoint,
   secret_key_base: "y369/z1NpLZ0RwijFFRVrtk9aISTt/ACxITr4b3nBOn7uc3KWXZAFJLiUNpIFJhG",
   server: false
 
+config :pauper_league, Oban, testing: :manual
+
 # In test we don't send emails
 config :pauper_league, PauperLeague.Mailer, adapter: Swoosh.Adapters.Test
 
