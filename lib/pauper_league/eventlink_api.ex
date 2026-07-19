@@ -65,7 +65,7 @@ defmodule PauperLeague.EventlinkApi do
       variables: %{
         refreshToken: access_token.refresh_token
       },
-      query: refresh_token_query()
+      query: PauperLeague.GraphQL.refresh_token_query()
     }
   end
 
@@ -74,6 +74,26 @@ defmodule PauperLeague.EventlinkApi do
       method: :post,
       url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
       json: store_event_request_body(store_id)
+    )
+    |> add_headers()
+    |> run_with_retry()
+  end
+
+  def get_event_info(event_id) do
+    Req.new(
+      method: :post,
+      url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
+      json: event_info_request_body(event_id)
+    )
+    |> add_headers()
+    |> run_with_retry()
+  end
+
+  def get_event_round_info(event_id, round_no) do
+    Req.new(
+      method: :post,
+      url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
+      json: event_round_request_body(event_id, round_no)
     )
     |> add_headers()
     |> run_with_retry()
@@ -136,117 +156,30 @@ defmodule PauperLeague.EventlinkApi do
         },
         locale: "en"
       },
-      query: store_event_query()
+      query: PauperLeague.GraphQL.store_event_query()
     }
   end
 
-  def refresh_token_query do
-    """
-    query refreshToken($refreshToken: String!) {
-      refreshToken(refreshToken: $refreshToken) {
-        access_token
-        refresh_token
-        expires_in
-        persona_id
-        display_name
-        __typename
-      }
+  def event_info_request_body(event_id) do
+    %{
+      operationName: "event",
+      variables: %{
+        includePlayerSaved: false,
+        id: event_id,
+        locale: "en"
+      },
+      query: PauperLeague.GraphQL.event_info_query()
     }
-    """
   end
 
-  def store_event_query do
-    """
-    query getStoreEvents($filter: AdvancedEventFilter!, $locale: String, $includePlayerSaved: Boolean! = false) {
-    storeEvents(filter: $filter) {
-      events {
-        ...EventFields
-        __typename
-      }
-      pageInfo {
-        page
-        pageSize
-        totalResults
-        __typename
-      }
-      hasMoreResults
-      __typename
+  def event_round_request_body(event_id, round_no) do
+    %{
+      operationName: "getGameStateAtRound",
+      variables: %{
+        eventId: event_id,
+        round: round_no
+      },
+      query: PauperLeague.GraphQL.event_round_query()
     }
-    }
-
-    fragment EventFields on Event {
-    id
-    status
-    title
-    isSegmentEvent
-    eventFormat(locale: $locale) {
-      id
-      name
-      color
-      requiresSetSelection
-      includesDraft
-      includesDeckbuilding
-      wizardsOnly
-      attributes {
-        attributeTag
-        __typename
-      }
-      __typename
-    }
-    cardSet(locale: $locale) {
-      id
-      name
-      __typename
-    }
-    rulesEnforcementLevel
-    entryFee {
-      amount
-      currency
-      __typename
-    }
-    venue {
-      id
-      name
-      latitude
-      longitude
-      address
-      streetAddress
-      city
-      state
-      country
-      postalCode
-      timeZone
-      phoneNumber
-      emailAddress
-      __typename
-    }
-    pairingType
-    capacity
-    numberOfPlayers
-    historicalNumPlayers
-    description
-    scheduledStartTime
-    estimatedEndTime
-    actualStartTime
-    actualEndTime
-    latitude
-    longitude
-    address
-    timeZone
-    phoneNumber
-    emailAddress
-    shortCode
-    startingTableNumber
-    hasTop8
-    isAdHoc
-    isOnline
-    groupId
-    requiredTeamSize
-    eventTemplateId
-    tags
-    playerSaved @include(if: $includePlayerSaved)
-    __typename
-    }
-    """
   end
 end
