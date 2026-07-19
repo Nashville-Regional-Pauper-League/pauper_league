@@ -37,4 +37,6 @@ npm-debug.log
 
 .vscode/
 .elixir_ls/
+.expert/
 .iex.exs
+junk/

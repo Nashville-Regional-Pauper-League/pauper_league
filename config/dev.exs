@@ -10,6 +10,8 @@ config :pauper_league, PauperLeague.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
+config :pauper_league, Oban, peer: Oban.Peers.Global
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #

@@ -1,5 +1,8 @@
 import Config
 
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
@@ -19,6 +22,8 @@ config :pauper_league, PauperLeagueWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4002],
   secret_key_base: "y369/z1NpLZ0RwijFFRVrtk9aISTt/ACxITr4b3nBOn7uc3KWXZAFJLiUNpIFJhG",
   server: false
+
+config :pauper_league, Oban, testing: :manual
 
 # In test we don't send emails
 config :pauper_league, PauperLeague.Mailer, adapter: Swoosh.Adapters.Test
