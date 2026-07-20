@@ -10,6 +10,7 @@ defmodule PauperLeague.Application do
     children = [
       PauperLeagueWeb.Telemetry,
       PauperLeague.Repo,
+      {Oban, Application.fetch_env!(:pauper_league, Oban)},
       {DNSCluster, query: Application.get_env(:pauper_league, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: PauperLeague.PubSub},
       # Start the Finch HTTP client for sending emails

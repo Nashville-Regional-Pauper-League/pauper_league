@@ -1,5 +1,5 @@
 defmodule PauperLeague.Workers.EventWorker do
-  use Oban.Worker
+  use Oban.Worker, max_attempts: 1
 
   import Ecto.Changeset
 
@@ -25,6 +25,8 @@ defmodule PauperLeague.Workers.EventWorker do
           |> PauperLeague.Repo.insert()
         end)
       end
+
+      :ok
     end
   end
 

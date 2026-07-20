@@ -1,6 +1,8 @@
 defmodule PauperLeagueWeb.AdminLive.Store do
   use PauperLeagueWeb, :live_view
 
+  import Ecto.Query
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, socket}
@@ -13,15 +15,25 @@ defmodule PauperLeagueWeb.AdminLive.Store do
 
     store = PauperLeague.Stores.Store |> PauperLeague.Repo.get(store_id)
 
-    {:noreply, socket |> assign(:store, store)}
+    events =
+      PauperLeague.Seasons.Event |> where([e], e.store_id == ^store_id) |> PauperLeague.Repo.all()
+
+    {:noreply, socket |> assign(:store, store) |> assign(:event_list, events)}
   end
 
   @impl true
   def handle_event("check", _unsigned_params, socket) do
     IO.inspect(socket)
-    _store_eventlink_id = socket.assigns.store.eventlink_id
+    store_eventlink_id = socket.assigns.store.eventlink_id
 
     # Initiate Job to Check Store Events
+    %{
+      "type" => "new_events",
+      "store_id" => store_eventlink_id
+    }
+    |> PauperLeague.Workers.EventWorker.new()
+    |> Oban.insert()
+    |> IO.inspect()
 
     {:noreply, socket}
   end
