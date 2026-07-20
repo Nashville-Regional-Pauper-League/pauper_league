@@ -3,8 +3,12 @@ defmodule PauperLeague.Workers.EventWorker do
 
   import Ecto.Changeset
 
-  def perform(%{args: %{"type" => "new_events", "store_id" => store_id}}) do
-    with {_, resp} <- PauperLeague.EventlinkApi.get_store_events(store_id),
+  def perform(%{args: %{"type" => "new_events", "store_id" => store_id} = args}) do
+    now = DateTime.utc_now()
+    start_date = args |> Map.get("start_date", now)
+    end_date = args |> Map.get("end_date", now |> DateTime.add(7, :day))
+
+    with {_, resp} <- PauperLeague.EventlinkApi.get_store_events(store_id, start_date, end_date),
          200 <- Map.get(resp, :status),
          body <- Map.get(resp, :body, %{}),
          true <- Map.has_key?(body, "data") do

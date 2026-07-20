@@ -24,7 +24,6 @@ defmodule PauperLeague.EventlinkApi do
 
   def add_current_auth_token(headers) do
     access_token = PauperLeague.AccessToken.get_current()
-
     auth_string = "Bearer " <> access_token.auth_token
 
     headers
@@ -69,11 +68,11 @@ defmodule PauperLeague.EventlinkApi do
     }
   end
 
-  def get_store_events(store_id) do
+  def get_store_events(store_id, start_time, end_time) do
     Req.new(
       method: :post,
       url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
-      json: store_event_request_body(store_id)
+      json: store_event_request_body(store_id, start_time, end_time)
     )
     |> add_headers()
     |> run_with_retry()
@@ -123,7 +122,7 @@ defmodule PauperLeague.EventlinkApi do
     |> Req.Request.put_headers(headers)
   end
 
-  def store_event_request_body(store_id) do
+  def store_event_request_body(store_id, start_time, end_time) do
     %{
       operationName: "getStoreEvents",
       variables: %{
@@ -133,10 +132,11 @@ defmodule PauperLeague.EventlinkApi do
           page: 0,
           pageSize: 250,
           # Need to change to dynamic dates
-          startDate: "2026-05-18T05:00:00.000Z",
-          endDate: "2026-07-15T05:00:00.000Z",
+          startDate: start_time |> DateTime.to_iso8601(),
+          endDate: end_time |> DateTime.to_iso8601(),
           searchText: "",
-          formatIds: ["7uyjldU9xB1IhLH6SY6UFf"],
+          # formatIds: ["7uyjldU9xB1IhLH6SY6UFf"],
+          formatIds: [],
           rulesEnforcementLevels: [],
           pairingTypes: [],
           twoHeadedGiant: nil,
