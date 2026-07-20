@@ -22,22 +22,22 @@ defmodule PauperLeague.EventlinkApi do
     }
   end
 
-  def add_current_auth_token(headers) do
-    access_token = PauperLeague.AccessToken.get_current()
+  def add_current_auth_token(headers, store_id) do
+    access_token = PauperLeague.AccessToken.get_current(store_id)
     auth_string = "Bearer " <> access_token.auth_token
 
     headers
     |> Map.put("Authorization", auth_string)
   end
 
-  def refresh_auth_token do
+  def refresh_auth_token(store_id) do
     {_request, resp} =
       Req.new(
         method: :post,
         url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
-        json: refresh_auth_request_body()
+        json: refresh_auth_request_body(store_id)
       )
-      |> add_headers()
+      |> add_headers(store_id)
       |> Req.Request.run_request()
 
     with 200 <- Map.get(resp, :status),
@@ -50,14 +50,15 @@ defmodule PauperLeague.EventlinkApi do
 
       %{
         auth_token: auth_token,
-        refresh_token: refresh_token
+        refresh_token: refresh_token,
+        store_id: store_id
       }
       |> PauperLeague.AccessToken.create()
     end
   end
 
-  def refresh_auth_request_body do
-    access_token = PauperLeague.AccessToken.get_current()
+  def refresh_auth_request_body(store_id) do
+    access_token = PauperLeague.AccessToken.get_current(store_id)
 
     %{
       operationName: "refreshToken",
@@ -68,37 +69,37 @@ defmodule PauperLeague.EventlinkApi do
     }
   end
 
-  def get_store_events(store_id, start_time, end_time) do
+  def get_store_events(store_id, store_eventlink_id, start_time, end_time) do
     Req.new(
       method: :post,
       url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
-      json: store_event_request_body(store_id, start_time, end_time)
+      json: store_event_request_body(store_eventlink_id, start_time, end_time)
     )
-    |> add_headers()
-    |> run_with_retry()
+    |> add_headers(store_id)
+    |> run_with_retry(store_id)
   end
 
-  def get_event_info(event_id) do
+  def get_event_info(event_id, store_id) do
     Req.new(
       method: :post,
       url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
       json: event_info_request_body(event_id)
     )
-    |> add_headers()
-    |> run_with_retry()
+    |> add_headers(store_id)
+    |> run_with_retry(store_id)
   end
 
-  def get_event_round_info(event_id, round_no) do
+  def get_event_round_info(event_id, round_no, store_id) do
     Req.new(
       method: :post,
       url: "https://api.tabletop.wizards.com/silverbeak-griffin-service/graphql",
       json: event_round_request_body(event_id, round_no)
     )
-    |> add_headers()
-    |> run_with_retry()
+    |> add_headers(store_id)
+    |> run_with_retry(store_id)
   end
 
-  def run_with_retry(query) do
+  def run_with_retry(query, store_id) do
     {_request, resp} =
       request_result =
       query
@@ -106,8 +107,8 @@ defmodule PauperLeague.EventlinkApi do
 
     cond do
       is_map(resp.body) and resp.body |> Map.has_key?("errors") ->
-        with {:ok, _} <- refresh_auth_token() do
-          query |> add_headers() |> Req.Request.run_request()
+        with {:ok, _} <- refresh_auth_token(store_id) do
+          query |> add_headers(store_id) |> Req.Request.run_request()
         end
 
       true ->
@@ -115,8 +116,8 @@ defmodule PauperLeague.EventlinkApi do
     end
   end
 
-  def add_headers(query) do
-    headers = default_headers() |> add_current_auth_token()
+  def add_headers(query, store_id) do
+    headers = default_headers() |> add_current_auth_token(store_id)
 
     query
     |> Req.Request.put_headers(headers)

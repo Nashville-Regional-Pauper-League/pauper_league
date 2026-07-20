@@ -9,12 +9,16 @@ defmodule PauperLeague.AccessToken do
     field :refresh_token, :string
     field :expires_at, :utc_datetime
     field :current, :boolean
+
+    belongs_to :store, PauperLeague.Stores.Store
   end
 
   def create(params) do
+    store_id = params.store_id
+
     current =
       from(at in __MODULE__,
-        where: at.current
+        where: at.current and at.store_id == ^store_id
       )
       |> PauperLeague.Repo.all()
 
@@ -28,9 +32,9 @@ defmodule PauperLeague.AccessToken do
     |> PauperLeague.Repo.insert()
   end
 
-  def get_current do
+  def get_current(store_id) do
     __MODULE__
-    |> where([at], at.current)
+    |> where([at], at.current and at.store_id == ^store_id)
     |> PauperLeague.Repo.one()
   end
 end

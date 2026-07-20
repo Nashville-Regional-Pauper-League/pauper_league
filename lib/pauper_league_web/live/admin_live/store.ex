@@ -24,12 +24,14 @@ defmodule PauperLeagueWeb.AdminLive.Store do
   @impl true
   def handle_event("check", _unsigned_params, socket) do
     IO.inspect(socket)
+    store_id = socket.assigns.store.id
     store_eventlink_id = socket.assigns.store.eventlink_id
 
     # Initiate Job to Check Store Events
     %{
       "type" => "new_events",
-      "store_id" => store_eventlink_id
+      "store_id" => store_id,
+      "store_eventlink_id" => store_eventlink_id
     }
     |> PauperLeague.Workers.EventWorker.new()
     |> Oban.insert()
