@@ -1,10 +1,11 @@
 <.back navigate={~p"/admin/stores"}>Back to stores</.back>
 <div>{"#{inspect(@store)}"}</div>
+<div>
+  <.button phx-click="check">Check Events</.button>
+</div>
+<div>Event Count: {length(@event_list || [])}</div>
 <div>Event List</div>
 <%= for event <- @event_list || [] do %>
   <div>{"#{inspect(event)}"}</div>
 <% end %>
-<div>
-  <.button phx-click="check">Check Events</.button>
-</div>
 <div>Upcoming Events</div>
