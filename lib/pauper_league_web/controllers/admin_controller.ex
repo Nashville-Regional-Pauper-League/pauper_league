@@ -6,9 +6,7 @@ defmodule PauperLeagueWeb.AdminController do
   end
 
   def stores(conn, _params) do
-    stores =
-      PauperLeague.Stores.list()
-      |> IO.inspect()
+    stores = PauperLeague.Stores.list()
 
     conn
     |> assign(:store_list, stores)

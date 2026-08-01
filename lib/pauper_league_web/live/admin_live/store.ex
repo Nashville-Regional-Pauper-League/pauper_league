@@ -9,21 +9,19 @@ defmodule PauperLeagueWeb.AdminLive.Store do
   end
 
   @impl true
-  def handle_params(%{"store_id" => store_id} = params, _, socket) do
-    IO.inspect(params, label: "params")
-    IO.inspect(socket, label: "socket")
-
+  def handle_params(%{"store_id" => store_id} = _params, _, socket) do
     store = PauperLeague.Stores.Store |> PauperLeague.Repo.get(store_id)
 
     events =
-      PauperLeague.Seasons.Event |> where([e], e.store_id == ^store_id) |> PauperLeague.Repo.all()
+      PauperLeague.Stores.RawEvent
+      |> where([e], e.store_id == ^store_id)
+      |> PauperLeague.Repo.all()
 
     {:noreply, socket |> assign(:store, store) |> assign(:event_list, events)}
   end
 
   @impl true
   def handle_event("check", _unsigned_params, socket) do
-    IO.inspect(socket)
     store_id = socket.assigns.store.id
     store_eventlink_id = socket.assigns.store.eventlink_id
 
@@ -35,7 +33,6 @@ defmodule PauperLeagueWeb.AdminLive.Store do
     }
     |> PauperLeague.Workers.EventWorker.new()
     |> Oban.insert()
-    |> IO.inspect()
 
     {:noreply, socket}
   end

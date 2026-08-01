@@ -13,7 +13,7 @@ config :pauper_league,
 
 config :pauper_league, Oban,
   engine: Oban.Engines.Basic,
-  queues: [default: 10],
+  queues: [default: 10, event_link: [limit: 1, dispatch_cooldown: 1000]],
   repo: PauperLeague.Repo,
   plugins: [
     {Oban.Plugins.Cron, crontab: []}

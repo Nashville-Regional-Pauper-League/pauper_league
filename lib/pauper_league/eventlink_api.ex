@@ -133,8 +133,8 @@ defmodule PauperLeague.EventlinkApi do
           page: 0,
           pageSize: 250,
           # Need to change to dynamic dates
-          startDate: start_time |> DateTime.to_iso8601(),
-          endDate: end_time |> DateTime.to_iso8601(),
+          startDate: start_time,
+          endDate: end_time,
           searchText: "",
           # formatIds: ["7uyjldU9xB1IhLH6SY6UFf"],
           formatIds: [],
