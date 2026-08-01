@@ -40,3 +40,4 @@ npm-debug.log
 .expert/
 .iex.exs
 junk/
+.DS_Store
