@@ -19,10 +19,20 @@ defmodule PauperLeague.Workers.EventDataWorker do
         params = %{data: event, event_id: raw_event.id}
         fields = [:data, :event_id]
 
-        with {:ok, _e} <- %RawEventData{} |> cast(params, fields) |> Repo.insert() do
+        with {:ok, inserted_event_data} <-
+               %RawEventData{} |> cast(params, fields) |> Repo.insert() do
           raw_event
           |> change(%{internal_state: "raw_data_event"})
           |> Repo.update()
+
+          %{
+            "event_id" => raw_event.eventlink_id,
+            "store_id" => raw_event.store_id,
+            "round_no" => 0,
+            "event_data_id" => inserted_event_data.id
+          }
+          |> PauperLeague.Workers.EventDataProcessor.new()
+          |> Oban.insert()
         end
       end
     else

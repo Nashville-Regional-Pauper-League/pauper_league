@@ -6,6 +6,9 @@ defmodule PauperLeague.Stores.RawEvent do
     field :eventlink_id, :string
     field :format, :string
     field :event_date, :date
+    field :description, :string
+    field :title, :string
+    field :eventlink_status, :string
     field :internal_state, :string
     belongs_to :store, PauperLeague.Stores.Store
 
