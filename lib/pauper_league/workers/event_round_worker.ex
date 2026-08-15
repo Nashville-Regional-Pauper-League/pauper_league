@@ -25,27 +25,27 @@ defmodule PauperLeague.Workers.EventRoundWorker do
 
         with {:ok, _} <- %RawEventRound{} |> cast(params, fields) |> Repo.insert(),
              {:ok, current_round} <- get_current_round(event),
-             {:ok, is_final} <- Utils.get_value(current_round, "isFinalRound", :boolean),
+             #  {:ok, is_final} <- Utils.get_value(current_round, "isFinalRound", :boolean),
              {:ok, last_round_no} <- Utils.get_value(current_round, "roundNumber", :integer) do
           # Schedule rest of rounds
-          if is_final do
-            1..last_round_no
-            |> Enum.map(fn i ->
-              %{"event_id" => eventlink_id, "round_no" => i, "store_id" => store_id}
-              |> __MODULE__.new()
-              |> Oban.insert()
-            end)
+          # if is_final do
+          1..last_round_no
+          |> Enum.map(fn i ->
+            %{"event_id" => eventlink_id, "round_no" => i, "store_id" => store_id}
+            |> __MODULE__.new()
+            |> Oban.insert()
+          end)
 
-            params = %{internal_state: "raw_round_data_pulling"}
+          params = %{internal_state: "raw_round_data_pulling"}
 
-            raw_event
-            |> change(params)
-            |> PauperLeague.Repo.update()
+          raw_event
+          |> change(params)
+          |> PauperLeague.Repo.update()
 
-            :ok
-          else
-            {:error, "Not final round #{inspect(event)}"}
-          end
+          :ok
+          # else
+          #   {:error, "Not final round #{inspect(event)}"}
+          # end
         end
       end
     else
