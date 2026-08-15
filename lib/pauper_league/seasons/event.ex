@@ -9,5 +9,7 @@ defmodule PauperLeague.Seasons.Event do
     field :games_to_win, :integer
     belongs_to :store, PauperLeague.Stores.Store
     belongs_to :season, PauperLeague.Seasons.Season
+
+    timestamps()
   end
 end
