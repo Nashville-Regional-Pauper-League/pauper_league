@@ -53,6 +53,7 @@ defmodule PauperLeague.MixProject do
        compile: false,
        depth: 1},
       {:swoosh, "~> 1.5"},
+      {:tz, "~> 0.28"},
       {:finch, "~> 0.13"},
       {:req, "~> 0.5.0"},
       {:oban, "~> 2.23"},

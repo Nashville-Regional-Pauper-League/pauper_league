@@ -28,7 +28,8 @@ defmodule PauperLeague.Workers.EventDataProcessor do
       event_date: date,
       title: title,
       description: description,
-      eventlink_status: status
+      eventlink_status: status,
+      internal_state: "raw_event_data_processed"
     }
 
     PauperLeague.Stores.RawEvent

@@ -36,6 +36,12 @@ defmodule PauperLeague.Workers.EventRoundWorker do
               |> Oban.insert()
             end)
 
+            params = %{internal_state: "raw_round_data_pulling"}
+
+            raw_event
+            |> change(params)
+            |> PauperLeague.Repo.update()
+
             :ok
           else
             {:error, "Not final round #{inspect(event)}"}

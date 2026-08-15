@@ -15,6 +15,8 @@ defmodule PauperLeagueWeb.AdminLive.Store do
     events =
       PauperLeague.Stores.RawEvent
       |> where([e], e.store_id == ^store_id)
+      |> where([e], e.format == "Pauper")
+      |> order_by([e], desc: e.event_date)
       |> PauperLeague.Repo.all()
 
     {:noreply, socket |> assign(:store, store) |> assign(:event_list, events)}

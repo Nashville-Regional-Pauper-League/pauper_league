@@ -3,6 +3,7 @@ defmodule PauperLeague.Repo.Migrations.AddSeasonEvents do
 
   def change do
     create table(:seasons) do
+      add :name, :text
       add :season_number, :integer
       add :start_date, :date
       add :end_date, :date
@@ -25,6 +26,7 @@ defmodule PauperLeague.Repo.Migrations.AddSeasonEvents do
 
     create table(:event_teams) do
       add :event_id, references(:events)
+      add :team_id, :text
     end
 
     create table(:event_team_players) do

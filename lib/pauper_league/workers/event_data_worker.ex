@@ -22,7 +22,7 @@ defmodule PauperLeague.Workers.EventDataWorker do
         with {:ok, inserted_event_data} <-
                %RawEventData{} |> cast(params, fields) |> Repo.insert() do
           raw_event
-          |> change(%{internal_state: "raw_data_event"})
+          |> change(%{internal_state: "raw_event_data"})
           |> Repo.update()
 
           %{

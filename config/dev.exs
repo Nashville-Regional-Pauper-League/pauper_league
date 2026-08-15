@@ -12,6 +12,8 @@ config :pauper_league, PauperLeague.Repo,
 
 config :pauper_league, Oban, peer: Oban.Peers.Global
 
+config :elixir, :time_zone_database, Tz.TimeZoneDatabase
+
 # For development, we disable any cache and enable
 # debugging and code reloading.
 #
