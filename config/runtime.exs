@@ -28,14 +28,11 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
-  ca_certs = System.get_env("CA_CERTS")
-
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
   config :pauper_league, PauperLeague.Repo,
     ssl: [
-      verify: :verify_peer,
-      cacerts: [ca_certs]
+      verify: :verify_none
     ],
     url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
