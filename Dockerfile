@@ -48,7 +48,7 @@ RUN mix release
 # ============================================================
 FROM debian:${DEBIAN_VERSION} AS runtime
 
-RUN apt-get clean all && apt-get update && apt-get install -y curl openssl tini
+RUN apt-get clean all && apt-get update && apt-get install -y curl openssl
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -66,4 +66,4 @@ RUN chown -R nobody:nogroup /app
 
 USER nobody
 
-ENTRYPOINT ["tini", "--", "/start.sh"]
+ENTRYPOINT ["/start.sh"]
