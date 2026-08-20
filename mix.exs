@@ -9,7 +9,14 @@ defmodule PauperLeague.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: [
+        pauper_league: [
+          version: "0.1.0",
+          applications: [runtime_tools: :permanent, pauper_league: :permanent],
+          cookie: "EDT3UG3MPOSXCNQPBJCWPCTPFJESPI57PDBOKUE3RC42MWMTSA2BPBQ2TDPOTBFP"
+        ]
+      ]
     ]
   end
 
