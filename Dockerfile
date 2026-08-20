@@ -48,7 +48,7 @@ RUN mix release
 # ============================================================
 FROM debian:${DEBIAN_VERSION} AS runtime
 
-RUN apt-get clean all && apt-get update
+RUN apt-get clean all && apt-get update && apt-get install -y curl openssl tini
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -60,9 +60,10 @@ ENV PHX_SERVER=true
 WORKDIR /app
 
 COPY --from=build /app/_build/prod/rel/pauper_league ./
+COPY --from=build /app/config/start.sh /
 
 RUN chown -R nobody:nogroup /app
 
 USER nobody
 
-CMD ["bin/pauper_league", "start"]
+ENTRYPOINT ["tini", "--", "/start.sh"]
