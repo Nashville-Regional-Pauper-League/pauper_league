@@ -48,7 +48,10 @@ RUN mix release
 # ============================================================
 FROM debian:${DEBIAN_VERSION} AS runtime
 
-RUN apt-get clean all && apt-get update && apt-get install -y curl openssl tini
+RUN apt-get clean all && apt-get update && apt-get install -y curl openssl tini locales
+
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen && \
+    locale-gen
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
