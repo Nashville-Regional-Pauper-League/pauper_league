@@ -62,8 +62,4 @@ WORKDIR /app
 COPY --from=build /app/_build/prod/rel/pauper_league ./
 COPY --from=build /app/config/start.sh /
 
-RUN chown -R nobody:nogroup /app
-
-USER nobody
-
 ENTRYPOINT ["/start.sh"]
