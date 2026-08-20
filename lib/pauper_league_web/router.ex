@@ -71,6 +71,18 @@ defmodule PauperLeagueWeb.Router do
     end
   end
 
+  scope "/admin", PauperLeagueWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    get "/", AdminController, :base
+    get "/stores", AdminController, :stores
+
+    live_session :admin,
+      on_mount: [{PauperLeagueWeb.UserAuth, :ensure_authenticated}] do
+      live "/stores/:store_id", AdminLive.Store, :store
+    end
+  end
+
   scope "/", PauperLeagueWeb do
     pipe_through [:browser]
 

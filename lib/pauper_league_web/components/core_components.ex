@@ -17,7 +17,7 @@ defmodule PauperLeagueWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
-  import PauperLeagueWeb.Gettext
+  use Gettext, backend: PauperLeagueWeb.Gettext
 
   @doc """
   Renders a modal.

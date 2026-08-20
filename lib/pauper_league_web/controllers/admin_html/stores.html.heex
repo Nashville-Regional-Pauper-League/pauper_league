@@ -1,0 +1,11 @@
+Store List
+<ul>
+  <%= for store <- @store_list do %>
+    <li>
+      <.link navigate={~p"/admin/stores/#{store.id}"}>{store.name}</.link>
+    </li>
+  <% end %>
+</ul>
+<%= for store <- @store_list do %>
+  <div>{"#{inspect(store)}"}</div>
+<% end %>

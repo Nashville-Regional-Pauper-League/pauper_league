@@ -43,7 +43,7 @@ defmodule PauperLeagueWeb do
         layouts: [html: PauperLeagueWeb.Layouts]
 
       import Plug.Conn
-      import PauperLeagueWeb.Gettext
+      use Gettext, backend: PauperLeagueWeb.Gettext
 
       unquote(verified_routes())
     end
@@ -85,7 +85,7 @@ defmodule PauperLeagueWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import PauperLeagueWeb.CoreComponents
-      import PauperLeagueWeb.Gettext
+      use Gettext, backend: PauperLeagueWeb.Gettext
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

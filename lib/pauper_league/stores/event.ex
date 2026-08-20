@@ -1,14 +1,16 @@
-defmodule PauperLeague.Seasons.Event do
+defmodule PauperLeague.Stores.RawEvent do
   use Ecto.Schema
 
+  @schema_prefix "raw"
   schema "events" do
     field :eventlink_id, :string
     field :format, :string
     field :event_date, :date
-    field :playoff_rounds, :integer
-    field :games_to_win, :integer
+    field :description, :string
+    field :title, :string
+    field :eventlink_status, :string
+    field :internal_state, :string
     belongs_to :store, PauperLeague.Stores.Store
-    belongs_to :season, PauperLeague.Seasons.Season
 
     timestamps()
   end

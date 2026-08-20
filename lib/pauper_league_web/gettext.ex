@@ -20,5 +20,5 @@ defmodule PauperLeagueWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :pauper_league
+  use Gettext.Backend, otp_app: :pauper_league
 end

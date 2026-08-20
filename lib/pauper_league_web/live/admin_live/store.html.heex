@@ -1,0 +1,34 @@
+<.back navigate={~p"/admin/stores"}>Back to stores</.back>
+<div>{"#{inspect(@store)}"}</div>
+<div>
+  <.button phx-click="check">Check Events</.button>
+</div>
+<div>
+  Event Count: {length(@event_list || [])}
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Date</th>
+      <th>Format</th>
+      <th>Description</th>
+      <th>Eventlink Status</th>
+      <th>PL Status</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= for event <- @event_list || [] do %>
+      <tr>
+        <td>{event.title}</td>
+        <td>{event.event_date}</td>
+        <td>{event.format}</td>
+        <td>{event.description}</td>
+        <td>{event.eventlink_status}</td>
+        <td>{event.internal_state}</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
