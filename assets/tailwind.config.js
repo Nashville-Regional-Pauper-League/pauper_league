@@ -16,9 +16,6 @@ module.exports = {
             colors: {
                 brand: "#d4360f",
             },
-            fontFamily: {
-                elephant: ["Elephant", "serif"],
-            },
         },
     },
     plugins: [

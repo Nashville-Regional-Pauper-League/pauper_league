@@ -3,8 +3,3 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
-
-@font-face {
-    font-family: "Elephant";
-    src: url("/assets/Elephant Regular.ttf") format("truetype");
-}
