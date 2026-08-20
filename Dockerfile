@@ -5,7 +5,7 @@ ARG DEBIAN_VERSION=trixie-20260713-slim
 # ============================================================
 # Build
 # ============================================================
-FROM hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-trixie-20260713-slim AS build
+FROM hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION} AS build
 
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends build-essential git curl 
