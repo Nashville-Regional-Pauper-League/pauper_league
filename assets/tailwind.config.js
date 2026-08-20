@@ -14,8 +14,11 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                brand: "#FD4F00",
-            }
+                brand: "#d4360f",
+            },
+            fontFamily: {
+                elephant: ["Elephant", "serif"],
+            },
         },
     },
     plugins: [
