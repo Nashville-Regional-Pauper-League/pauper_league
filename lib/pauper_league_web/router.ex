@@ -22,6 +22,7 @@ defmodule PauperLeagueWeb.Router do
 
     get "/", PageController, :home
     get "/leaderboard", PageController, :board
+    get "/leaderboard/:season_id", PageController, :board
     get "/players/:player_id", PageController, :player
     get "/decks/:deck_id", PageController, :deck
     get "/metagame", PageController, :meta

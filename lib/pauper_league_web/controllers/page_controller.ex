@@ -1,15 +1,43 @@
 defmodule PauperLeagueWeb.PageController do
   use PauperLeagueWeb, :controller
 
+  import Ecto.Query
+
   def home(conn, _params) do
     render(conn, :home)
+  end
+
+  def board(conn, %{"season_id" => season_id}) do
+    board_list = PauperLeague.Leaderboard.get_leaderboard_by_season(season_id)
+
+    seasons =
+      PauperLeague.Seasons.Season
+      |> select([s], %{id: s.id, name: s.name})
+      |> order_by([s], s.season_number)
+      |> PauperLeague.Repo.all()
+
+    conn
+    |> assign(:leaderboard, board_list)
+    |> assign(:seasons, seasons)
+    |> assign(:season_id, String.to_integer(season_id))
+    |> render(:board)
   end
 
   def board(conn, _params) do
     board_list = PauperLeague.Leaderboard.get_leaderboard_by_season()
 
+    seasons =
+      PauperLeague.Seasons.Season
+      |> select([s], %{id: s.id, name: s.name, active: s.active})
+      |> order_by([s], s.season_number)
+      |> PauperLeague.Repo.all()
+
+    season_id = seasons |> Enum.find(fn s -> s.active end) |> Map.get(:id)
+
     conn
     |> assign(:leaderboard, board_list)
+    |> assign(:seasons, seasons)
+    |> assign(:season_id, season_id)
     |> render(:board)
   end
 
