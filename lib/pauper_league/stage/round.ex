@@ -1,22 +1,25 @@
-defmodule PauperLeague.Seasons.Event.Round do
+defmodule PauperLeague.Stage.Event.Round do
   use Ecto.Schema
 
   import Ecto.Query
   import Ecto.Changeset
   alias PauperLeague.Repo
 
+  @schema_prefix "stage"
   schema "event_rounds" do
-    belongs_to :event, PauperLeague.Seasons.Event
+    belongs_to :event, PauperLeague.Stage.Event
     field :eventlink_id, :string
     field :round_number, :integer
     field :is_playoff, :boolean
     # field :games_to_win, :integer
     field :is_final_round, :boolean
+
+    has_many :event_round_matches, PauperLeague.Stage.Event.RoundMatch, foreign_key: :round_id
   end
 
-  def create_rounds_from_raw(raw_event_id) do
+  def stage_rounds_from_raw(raw_event_id) do
     raw_event = PauperLeague.Stores.RawEvent |> Repo.get(raw_event_id)
-    season_event = PauperLeague.Seasons.Event |> Repo.get_by(eventlink_id: raw_event.eventlink_id)
+    season_event = PauperLeague.Stage.Event |> Repo.get_by(eventlink_id: raw_event.eventlink_id)
 
     event_round_data =
       PauperLeague.Stores.RawEventRound
@@ -30,31 +33,6 @@ defmodule PauperLeague.Seasons.Event.Round do
       params = %{
         event_id: season_event.id,
         round_number: round.round_no
-        # games_to_win: round |> Map.get(:data) |> Map.get("gamesToWin")
-      }
-
-      %__MODULE__{}
-      |> change(params)
-      |> Repo.insert()
-    end)
-  end
-
-  def create_rounds_from_stage(staged_event_id) do
-    staged_event = PauperLeague.Stage.Event |> Repo.get(staged_event_id)
-
-    season_event =
-      PauperLeague.Seasons.Event |> Repo.get_by(eventlink_id: staged_event.eventlink_id)
-
-    event_round_data =
-      PauperLeague.Stage.Event.Round
-      |> where([ed], ed.event_id == ^staged_event_id)
-      |> Repo.all()
-
-    event_round_data
-    |> Enum.map(fn round ->
-      params = %{
-        event_id: season_event.id,
-        round_number: round.round_number
         # games_to_win: round |> Map.get(:data) |> Map.get("gamesToWin")
       }
 

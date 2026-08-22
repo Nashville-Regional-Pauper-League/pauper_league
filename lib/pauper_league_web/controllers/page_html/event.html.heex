@@ -1,0 +1,25 @@
+<h2 class="text-3xl font-bold">Event Info</h2>
+<div>Season: {@event.season_name}</div>
+<div>Date: {@event.event_date}</div>
+<div>Store: {@event.store_name}</div>
+<div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+  <.table id="standings" rows={@standings}>
+    <:col :let={player} label="Deck">
+      <.link navigate={~p"/players/#{player.player_id}"} class="hover:underline">
+        {player.player_first_name} {String.first(player.player_last_name)}.
+      </.link>
+    </:col>
+    <:col :let={player} label="Deck">
+      <%= if not is_nil(player.deck_id) do %>
+        <.link navigate={~p"/decks/#{player.deck_id}"} class="hover:underline">
+          {player.deck_name}
+        </.link>
+      <% else %>
+        <div>Unknown</div>
+      <% end %>
+    </:col>
+    <:col :let={player} label="Record">
+      {player.match_wins}-{player.match_losses}-{player.match_draws}
+    </:col>
+  </.table>
+</div>

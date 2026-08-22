@@ -10,17 +10,11 @@ defmodule PauperLeague.Workers.EventWorker do
           %{
             "type" => "new_events",
             "store_eventlink_id" => store_eventlink_id,
-            "store_id" => store_id
+            "store_id" => store_id,
+            "direction" => direction
           } = _args
       }) do
-    now = DateTime.utc_now()
-    ## looking backward
-    start_date = now |> DateTime.add(-14, :day) |> DateTime.to_iso8601()
-    end_date = now |> DateTime.to_iso8601()
-
-    ## looking forward
-    # start_date = args |> Map.get("start_date", now |> DateTime.to_iso8601())
-    # end_date = args |> Map.get("end_date", now |> DateTime.add(7, :day) |> DateTime.to_iso8601())
+    {start_date, end_date} = get_dates(direction)
 
     with {_, resp} <-
            PauperLeague.EventlinkApi.get_store_events(
@@ -69,6 +63,22 @@ defmodule PauperLeague.Workers.EventWorker do
       err ->
         {:error, "Other error - state #{inspect(err)}"}
     end
+  end
+
+  def get_dates("past") do
+    now = DateTime.utc_now()
+    ## looking backward
+    start_date = now |> DateTime.add(-14, :day) |> DateTime.to_iso8601()
+    end_date = now |> DateTime.to_iso8601()
+    {start_date, end_date}
+  end
+
+  def get_dates("future") do
+    now = DateTime.utc_now()
+    ## looking forward
+    start_date = now |> DateTime.to_iso8601()
+    end_date = now |> DateTime.add(7, :day) |> DateTime.to_iso8601()
+    {start_date, end_date}
   end
 
   def event_keys do

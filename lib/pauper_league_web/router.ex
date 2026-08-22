@@ -21,6 +21,12 @@ defmodule PauperLeagueWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/leaderboard", PageController, :board
+    get "/players/:player_id", PageController, :player
+    get "/decks/:deck_id", PageController, :deck
+    get "/metagame", PageController, :meta
+    get "/events", PageController, :events
+    get "/events/:event_id", PageController, :event
   end
 
   # Other scopes may use custom stacks.
@@ -52,10 +58,10 @@ defmodule PauperLeagueWeb.Router do
 
     live_session :redirect_if_user_is_authenticated,
       on_mount: [{PauperLeagueWeb.UserAuth, :redirect_if_user_is_authenticated}] do
-      live "/users/register", UserRegistrationLive, :new
+      # live "/users/register", UserRegistrationLive, :new
       live "/users/log_in", UserLoginLive, :new
-      live "/users/reset_password", UserForgotPasswordLive, :new
-      live "/users/reset_password/:token", UserResetPasswordLive, :edit
+      # live "/users/reset_password", UserForgotPasswordLive, :new
+      # live "/users/reset_password/:token", UserResetPasswordLive, :edit
     end
 
     post "/users/log_in", UserSessionController, :create
@@ -80,6 +86,7 @@ defmodule PauperLeagueWeb.Router do
     live_session :admin,
       on_mount: [{PauperLeagueWeb.UserAuth, :ensure_authenticated}] do
       live "/stores/:store_id", AdminLive.Store, :store
+      live "/staged/events/:stage_event_id", AdminLive.StagedEvent, :staged_event
     end
   end
 

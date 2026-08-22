@@ -1,10 +1,11 @@
-defmodule PauperLeague.Seasons.Event do
+defmodule PauperLeague.Stage.Event do
   use Ecto.Schema
 
   import Ecto.Query
   import Ecto.Changeset
   alias PauperLeague.Repo
 
+  @schema_prefix "stage"
   schema "events" do
     field :eventlink_id, :string
     field :format, :string
@@ -18,33 +19,15 @@ defmodule PauperLeague.Seasons.Event do
   end
 
   def clear_data do
-    PauperLeague.Seasons.Event.MatchResult |> Repo.delete_all()
-    PauperLeague.Seasons.Event.RoundMatch |> Repo.delete_all()
-    PauperLeague.Seasons.Event.TeamPlayer |> Repo.delete_all()
-    PauperLeague.Seasons.Event.Round |> Repo.delete_all()
-    PauperLeague.Seasons.Event.EventTeam |> Repo.delete_all()
-    PauperLeague.Seasons.Event |> Repo.delete_all()
+    PauperLeague.Stage.Event.MatchResult |> Repo.delete_all()
+    PauperLeague.Stage.Event.RoundMatch |> Repo.delete_all()
+    PauperLeague.Stage.Event.TeamPlayer |> Repo.delete_all()
+    PauperLeague.Stage.Event.Round |> Repo.delete_all()
+    PauperLeague.Stage.Event.EventTeam |> Repo.delete_all()
+    PauperLeague.Stage.Event |> Repo.delete_all()
   end
 
-  def create_event_from_stage(stage_event_id) do
-    stage_event = PauperLeague.Stage.Event |> Repo.get(stage_event_id)
-
-    params = %{
-      store_id: stage_event.store_id,
-      season_id: stage_event.season_id,
-      eventlink_id: stage_event.eventlink_id,
-      format: stage_event.format,
-      event_date: stage_event.event_date,
-      playoff_rounds: 0,
-      games_to_win: 0
-    }
-
-    %__MODULE__{}
-    |> change(params)
-    |> Repo.insert()
-  end
-
-  def create_event_from_raw(raw_event_id, season_id \\ 1) do
+  def stage_event_from_raw(raw_event_id, season_id \\ 1) do
     raw_event = PauperLeague.Stores.RawEvent |> Repo.get(raw_event_id)
 
     params = %{
@@ -62,22 +45,6 @@ defmodule PauperLeague.Seasons.Event do
     |> Repo.insert()
   end
 
-  def get_events_by_season(season_id) do
-    from(e in __MODULE__,
-      join: st in PauperLeague.Stores.Store,
-      on: e.store_id == st.id,
-      where: e.season_id == ^season_id,
-      order_by: [desc: e.event_date],
-      select: %{
-        event_id: e.id,
-        event_date: e.event_date,
-        store_id: st.id,
-        store_name: st.name
-      }
-    )
-    |> Repo.all()
-  end
-
   def event_view(event_id) do
     from(e in __MODULE__,
       join: st in PauperLeague.Stores.Store,
@@ -85,8 +52,8 @@ defmodule PauperLeague.Seasons.Event do
       join: s in PauperLeague.Seasons.Season,
       on: e.season_id == s.id,
       select: %{
-        id: e.id,
         event_id: e.id,
+        eventlink_id: e.eventlink_id,
         event_date: e.event_date,
         store_id: st.id,
         store_name: st.name,
@@ -98,22 +65,30 @@ defmodule PauperLeague.Seasons.Event do
 
   def standings(event_id) do
     from(e in __MODULE__,
-      join: et in PauperLeague.Seasons.Event.EventTeam,
+      join: et in PauperLeague.Stage.Event.EventTeam,
       on: e.id == et.event_id,
-      join: etp in PauperLeague.Seasons.Event.TeamPlayer,
+      join: etp in PauperLeague.Stage.Event.TeamPlayer,
       on: et.id == etp.event_team_id,
       join: p in PauperLeague.Player,
       on: etp.player_id == p.id,
       left_join: d in PauperLeague.DeckArchetype,
       on: et.deck_archetype_id == d.id,
-      join: mr in PauperLeague.Seasons.Event.MatchResult,
+      join: mr in PauperLeague.Stage.Event.MatchResult,
       on: mr.event_team_id == et.id,
       where: e.id == ^event_id,
-      group_by: [p.id, p.first_name, p.last_name, d.id, d.name],
+      group_by: [
+        p.id,
+        p.first_name,
+        p.last_name,
+        d.id,
+        d.name,
+        et.id
+      ],
       select: %{
         player_id: p.id,
         player_first_name: p.first_name,
         player_last_name: p.last_name,
+        event_team_id: et.id,
         deck_id: d.id,
         deck_name: d.name,
         matches: count(),
@@ -146,6 +121,16 @@ defmodule PauperLeague.Seasons.Event do
       }
     )
     |> Repo.all()
-    |> Enum.sort_by(fn player -> player.match_wins * 3 + player.match_draws * 1 end, :desc)
+    |> Enum.sort_by(
+      fn player -> {player.match_wins * 3 + player.match_draws * 1, player.player_last_name} end,
+      :desc
+    )
+  end
+
+  def publish_staged_event(staged_event_id) do
+    PauperLeague.Seasons.Event.create_event_from_stage(staged_event_id)
+    PauperLeague.Seasons.Event.Round.create_rounds_from_stage(staged_event_id)
+    PauperLeague.Seasons.Event.EventTeam.create_teams_from_stage(staged_event_id)
+    PauperLeague.Seasons.Event.RoundMatch.create_matches_from_stage(staged_event_id)
   end
 end

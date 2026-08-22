@@ -6,7 +6,7 @@ defmodule PauperLeague.Seasons.Event.MatchResult do
     belongs_to :event_team, PauperLeague.Seasons.Event.EventTeam
     field :wins, :integer
     field :draws, :integer
-    field :isBye, :boolean
+    field :is_bye, :boolean
     field :losses, :integer
   end
 end

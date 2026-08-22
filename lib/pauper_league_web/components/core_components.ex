@@ -454,6 +454,7 @@ defmodule PauperLeagueWeb.CoreComponents do
   attr :id, :string, required: true
   attr :rows, :list, required: true
   attr :scrollable, :boolean, default: nil
+  attr :set_width, :string, default: "min-w-[10rem] w-full md:min-w-[30rem] lg:min-w-[40rem]"
   attr :row_id, :any, default: nil, doc: "the function for generating the row id"
   attr :row_click, :any, default: nil, doc: "the function for handling phx-click on each row"
 
@@ -474,14 +475,11 @@ defmodule PauperLeagueWeb.CoreComponents do
       end
 
     ~H"""
-    <%!-- <div class="relative overflow-y-visible px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] max-h-[40rem] mt-4 sm:w-full">
-        <thead class="sticky z-40 text-left leading-6"> --%>
-    <div class={"#{@scrollable && "max-h-[90vh]"} overflow-auto px-4 sm:px-0"}>
-      <table class="min-w-[10rem] w-full lg:min-w-[40rem]">
-        <thead class={"#{@scrollable && "sticky pt-2 bg-[#f4f1ea] top-0 z-40"} text-left leading-6"}>
+    <div class={"#{@scrollable && "max-h-[90vh]"} overflow-auto"}>
+      <table class={"#{@set_width}"}>
+        <thead class={"#{@scrollable && "sticky pt-2 top-0 z-40"} bg-[#a59e8e] text-left leading-6"}>
           <tr>
-            <th :for={col <- @col} class="pl-2 pb-4 pr-6 font-bold">{col[:label]}</th>
+            <th :for={col <- @col} class="pt-2 pl-4 pb-4 pr-6 font-bold">{col[:label]}</th>
             <th :if={@action != []} class="relative p-0 pb-4">
               <span class="sr-only">{gettext("Actions")}</span>
             </th>
@@ -648,6 +646,32 @@ defmodule PauperLeagueWeb.CoreComponents do
     |> JS.hide(to: "##{id}", transition: {"block", "block", "hidden"})
     |> JS.remove_class("overflow-hidden", to: "body")
     |> JS.pop_focus()
+  end
+
+  def live_select(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
+    assigns =
+      assigns
+      |> assign(:errors, Enum.map(field.errors, &translate_error(&1)))
+      |> assign(:live_select_opts, assigns_to_attributes(assigns, [:errors, :label]))
+
+    ~H"""
+    <div phx-feedback-for={@field.name}>
+      <.label for={@field.id}>{@label}</.label>
+      <LiveSelect.live_select
+        field={@field}
+        text_input_class={[
+          "mt-2 block w-full rounded-lg border-zinc-300 py-[7px] px-[11px]",
+          "text-zinc-900 focus:outline-none focus:ring-4 sm:text-sm sm:leading-6",
+          "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 phx-no-feedback:focus:ring-zinc-800/5",
+          "border-zinc-300 focus:border-zinc-400 focus:ring-zinc-800/5",
+          @errors != [] && "border-rose-400 focus:border-rose-400 focus:ring-rose-400/10"
+        ]}
+        {@live_select_opts}
+      />
+
+      <.error :for={msg <- @errors}>{msg}</.error>
+    </div>
+    """
   end
 
   @doc """

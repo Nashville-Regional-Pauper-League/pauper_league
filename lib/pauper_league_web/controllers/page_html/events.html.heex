@@ -1,0 +1,15 @@
+<div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+  <.table id="event_list" rows={@event_list}>
+    <:col :let={event} label="Date">
+      {event.event_date}
+    </:col>
+    <:col :let={event} label="Store">
+      {event.store_name}
+    </:col>
+    <:col :let={event}>
+      <.link navigate={~p"/events/#{event.event_id}"} class="hover:underline">
+        View Event
+      </.link>
+    </:col>
+  </.table>
+</div>

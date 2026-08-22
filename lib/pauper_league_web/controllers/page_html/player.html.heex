@@ -1,0 +1,49 @@
+<div class="font-bold text-3xl mt-3">{@player.first_name} {String.first(@player.last_name)}.</div>
+<div class="font-semibold text-xl">
+  Record: {@player.record} ({@player.win_rate}) | Total 3-0s: {@player.trophies}
+</div>
+<div class="flex items-center gap-4">
+  <div class="h-px flex-1 bg-slate-600"></div>
+
+  <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+    Decks
+  </h2>
+
+  <div class="h-px flex-1 bg-slate-600"></div>
+</div>
+<div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+  <.table id="decks" rows={@player.decks}>
+    <:col :let={deck} label="Deck">
+      <.link navigate={~p"/decks/#{deck.deck_id}"} class="hover:underline">{deck.deck}</.link>
+    </:col>
+    <:col :let={deck} label="Record">
+      {deck.match_wins}-{deck.match_losses}-{deck.match_draws}
+    </:col>
+    <:col :let={deck} label="Win Rate">{deck.win_rate}</:col>
+  </.table>
+</div>
+<div class="flex items-center gap-4 mt-3">
+  <div class="h-px flex-1 bg-slate-600"></div>
+
+  <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+    Events
+  </h2>
+
+  <div class="h-px flex-1 bg-slate-600"></div>
+</div>
+<%= for {{event_id, date, store, season}, rounds} <- @player.events do %>
+  <div class="overflow-hidden mt-4 rounded-2xl bg-zinc-100 shadow-lg ring-1 ring-white/10">
+    <div class="bg-[#47613E] text-white p-3">
+      <.link navigate={~p"/"} class="font-bold">{store} | {date} | {season}</.link>
+    </div>
+    <.table id={"rounds-#{event_id}"} rows={rounds}>
+      <:col :let={round} label="Round">{round.round}</:col>
+      <:col :let={round} label="Opponent">
+        {round.opp_first_name} {String.first(round.opp_last_name)}.
+      </:col>
+      <:col :let={round} label="Result">
+        {round.match_wins}-{round.match_losses}-{round.match_draws}
+      </:col>
+    </.table>
+  </div>
+<% end %>

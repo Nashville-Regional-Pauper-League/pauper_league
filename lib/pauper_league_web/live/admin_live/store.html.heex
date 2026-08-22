@@ -1,7 +1,8 @@
 <.back navigate={~p"/admin/stores"}>Back to stores</.back>
-<div>{"#{inspect(@store)}"}</div>
+
 <div>
-  <.button phx-click="check">Check Events</.button>
+  <.button phx-click="check" value="past">Check Past Events</.button>
+  <.button phx-click="check" value="future">Check Future Events</.button>
 </div>
 <div>
   Event Count: {length(@event_list || [])}
@@ -15,7 +16,10 @@
       <th>Format</th>
       <th>Description</th>
       <th>Eventlink Status</th>
-      <th>PL Status</th>
+      <%!-- <th>PL Status</th> --%>
+      <th>Completed Rounds</th>
+      <th>Published</th>
+      <th>Staged</th>
     </tr>
   </thead>
 
@@ -27,7 +31,33 @@
         <td>{event.format}</td>
         <td>{event.description}</td>
         <td>{event.eventlink_status}</td>
-        <td>{event.internal_state}</td>
+        <%!-- <td>{event.internal_state}</td> --%>
+        <td class="text-center">{event.completed_rounds}</td>
+        <td>{not is_nil(event.season_event_id)}</td>
+        <td>
+          <%= if not is_nil(event.stage_event_id) do %>
+            <.link navigate={~p"/admin/staged/events/#{event.stage_event_id}"}>
+              View Staging
+            </.link>
+          <% else %>
+            {not is_nil(event.stage_event_id)}
+          <% end %>
+        </td>
+        <td>
+          <.button phx-click="check_event_status" value={event.id}>Update Status</.button>
+        </td>
+        <td>
+          <.button phx-click="check_event_rounds" value={event.id}>
+            Check Rounds
+          </.button>
+        </td>
+        <td>
+          <%= if event.completed_rounds == 3 do %>
+            <.button phx-click="stage_event" value={event.id}>
+              Stage Event
+            </.button>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

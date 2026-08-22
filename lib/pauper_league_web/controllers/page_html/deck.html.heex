@@ -1,0 +1,48 @@
+<div class="text-4xl font-bold">{@deck.deck_name}</div>
+<div>Matches: {@deck.matches}</div>
+<div>Win rate: {@deck.win_rate}</div>
+<div>Record: {@deck.match_wins}-{@deck.match_losses}-{@deck.match_draws}</div>
+<div class="flex items-center gap-4">
+  <div class="h-px flex-1 bg-slate-600"></div>
+
+  <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+    Top Specialists
+  </h2>
+
+  <div class="h-px flex-1 bg-slate-600"></div>
+</div>
+<div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+  <.table id="specialists" rows={@specialists}>
+    <:col :let={specialist} label="Player">
+      <.link navigate={~p"/players/#{specialist.player_id}"} class="hover:underline">
+        {specialist.player_first_name} {String.first(specialist.player_last_name)}.
+      </.link>
+    </:col>
+    <:col :let={specialist} label="Record">
+      {specialist.match_wins}-{specialist.match_losses}-{specialist.match_draws}
+    </:col>
+    <:col :let={specialist} label="Win Rate">{specialist.win_rate}</:col>
+  </.table>
+</div>
+<div class="flex items-center gap-4 mt-4">
+  <div class="h-px flex-1 bg-slate-600"></div>
+
+  <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+    Matchups
+  </h2>
+
+  <div class="h-px flex-1 bg-slate-600"></div>
+</div>
+<div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+  <.table id="matchups" rows={@matchups}>
+    <:col :let={matchup} label="Opp Deck">
+      <.link navigate={~p"/decks/#{matchup.opp_deck_id}"} class="hover:underline">
+        {matchup.opp_deck_name}
+      </.link>
+    </:col>
+    <:col :let={matchup} label="Record">
+      {matchup.match_wins}-{matchup.match_losses}-{matchup.match_draws}
+    </:col>
+    <:col :let={matchup} label="Win Rate">{matchup.win_rate}</:col>
+  </.table>
+</div>

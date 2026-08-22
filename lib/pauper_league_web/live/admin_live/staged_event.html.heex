@@ -1,0 +1,65 @@
+<div class="flex justify-between">
+  <h2 class="text-3xl font-bold bg-red-300">STAGING Event Info</h2>
+
+  <%= if @ready_to_publish and is_nil(@published_id) do %>
+    <.button
+      id={"publish-#{@event.event_id}-button"}
+      phx-click="publish-event"
+      value={@event.event_id}
+    >
+      Publish
+    </.button>
+  <% end %>
+  <%= if not is_nil(@published_id) do %>
+    <.link id={"view-#{@published_id}-button"} navigate={~p"/events/#{@published_id}"}>
+      View Live Event
+    </.link>
+  <% end %>
+</div>
+<div>Season: {@event.season_name}</div>
+<div>Date: {@event.event_date}</div>
+<div>Store: {@event.store_name}</div>
+<%= if is_nil(@published_id) do %>
+  <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+    <.table id="standings" rows={@standings}>
+      <:col :let={player} label="Deck">
+        <.link navigate={~p"/players/#{player.player_id}"} class="hover:underline">
+          {player.player_first_name} {String.first(player.player_last_name)}.
+        </.link>
+      </:col>
+      <:col :let={player} label="Deck">
+        <div class="flex gap-4 justify-between items-center">
+          <div class="flex-1">
+            <%= if not is_nil(player.deck_id) do %>
+              <.link navigate={~p"/decks/#{player.deck_id}"} class="hover:underline">
+                <div class="bg-green-300 px-3">{player.deck_name}</div>
+              </.link>
+            <% else %>
+              <div class="bg-red-300 px-3">No Deck</div>
+            <% end %>
+          </div>
+          <div class="flex-initial">
+            <.form for={@form} phx-change={"add-deck-#{player.event_team_id}"}>
+              <%!-- <.input hidden field={player.event_team[:event_team_id]} value={player.event_team_id} /> --%>
+              <.live_select
+                id={"#{player.player_id}-deck-choice"}
+                field={@form[:deck_archetype_id]}
+                label=""
+                update_min_len={0}
+                options={@default_decks}
+              />
+            </.form>
+          </div>
+          <div class="flex-1">
+            <.button phx-click="remove-deck" value={player.event_team_id}>
+              Remove Deck
+            </.button>
+          </div>
+        </div>
+      </:col>
+      <:col :let={player} label="Record">
+        {player.match_wins}-{player.match_losses}-{player.match_draws}
+      </:col>
+    </.table>
+  </div>
+<% end %>
