@@ -18,6 +18,7 @@ defmodule PauperLeagueWeb.PageController do
 
     conn
     |> assign(:leaderboard, board_list)
+    |> assign(:title, "Leaderboard")
     |> assign(:seasons, seasons)
     |> assign(:season_id, String.to_integer(season_id))
     |> render(:board)
@@ -37,6 +38,7 @@ defmodule PauperLeagueWeb.PageController do
     conn
     |> assign(:leaderboard, board_list)
     |> assign(:seasons, seasons)
+    |> assign(:title, "Leaderboard")
     |> assign(:season_id, season_id)
     |> render(:board)
   end
@@ -44,6 +46,7 @@ defmodule PauperLeagueWeb.PageController do
   def player(conn, %{"player_id" => player_id}) do
     with {:ok, player} <- PauperLeague.Player.player_view(player_id) do
       conn
+      # |> assign(:title, "Player Info")
       |> assign(:player, player)
       |> render(:player)
     else
@@ -59,6 +62,7 @@ defmodule PauperLeagueWeb.PageController do
 
     conn
     |> assign(:deck, deck)
+    |> assign(:title, "Deck Info")
     |> assign(:specialists, specialists)
     |> assign(:matchups, matchups)
     |> render(:deck)
@@ -69,6 +73,7 @@ defmodule PauperLeagueWeb.PageController do
     season_totals = PauperLeague.DeckArchetype.get_decks_by_season(1)
 
     conn
+    |> assign(:title, "Metagame")
     |> assign(:season_totals, season_totals)
     |> assign(:last_event, last_event)
     |> render(:meta)
@@ -78,6 +83,7 @@ defmodule PauperLeagueWeb.PageController do
     event_list = PauperLeague.Seasons.Event.get_events_by_season(1)
 
     conn
+    |> assign(:title, "Events")
     |> assign(:event_list, event_list)
     |> render(:events)
   end
@@ -87,8 +93,15 @@ defmodule PauperLeagueWeb.PageController do
     standings = PauperLeague.Seasons.Event.standings(event_id)
 
     conn
+    |> assign(:title, "Event Info")
     |> assign(:event, event)
     |> assign(:standings, standings)
     |> render(:event)
+  end
+
+  def rules(conn, _) do
+    conn
+    |> assign(:title, "Rules")
+    |> render(:rules)
   end
 end

@@ -28,6 +28,7 @@ defmodule PauperLeagueWeb.Router do
     get "/metagame", PageController, :meta
     get "/events", PageController, :events
     get "/events/:event_id", PageController, :event
+    get "/rules", PageController, :rules
   end
 
   # Other scopes may use custom stacks.

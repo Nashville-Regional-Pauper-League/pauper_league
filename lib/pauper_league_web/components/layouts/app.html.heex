@@ -9,14 +9,8 @@
           />
         </.link>
       </div>
+      <div class="ml-16 text-bold text-2xl text-white">{assigns[:title] || ""}</div>
     </div>
-    <%!-- <.link
-      href={~p"/users/log_out"}
-      method="delete"
-      class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
-    >
-      Log out
-    </.link> --%>
     <div class="hidden md:flex items-center gap-4 font-semibold leading-6 text-zinc-900">
       <.link
         navigate={~p"/leaderboard"}
@@ -33,9 +27,9 @@
       >
         Metagame
       </.link>
-      <%!-- <.link navigate={~p"/rules"} class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80">
+      <.link navigate={~p"/rules"} class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80">
         Rules
-      </.link> --%>
+      </.link>
       <.link
         navigate="https://discord.gg/vf7Sa36bd"
         class="rounded-lg text-[#5865F2] bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
@@ -77,9 +71,9 @@
       >
         Metagame
       </.link>
-      <%!-- <.link navigate={~p"/rules"} class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80">
+      <.link navigate={~p"/rules"} class="rounded-lg bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80">
         Rules
-      </.link> --%>
+      </.link>
       <.link
         navigate="https://discord.gg/vf7Sa36bd"
         class="rounded-lg text-[#5865F2] bg-zinc-100 px-2 py-1 hover:bg-zinc-200/80"
