@@ -5,7 +5,7 @@ defmodule PauperLeagueWeb.PageController do
 
   def home(conn, _params) do
     conn
-    |> assign(:title, "First Season: Aug. 23 - Dec. 12")
+    # |> assign(:title, "Season: Aug. 23 - Dec. 12")
     |> render(:home)
   end
 
