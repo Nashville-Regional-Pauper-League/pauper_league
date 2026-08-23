@@ -14,7 +14,12 @@
 <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
   <.table id="decks" rows={@player.decks}>
     <:col :let={deck} label="Deck">
-      <.link navigate={~p"/decks/#{deck.deck_id}"} class="hover:underline">{deck.deck}</.link>
+      <.link
+        navigate={~p"/decks/#{deck.deck_id}"}
+        class="text-blue-600 underline hover:text-blue-800"
+      >
+        {deck.deck}
+      </.link>
     </:col>
     <:col :let={deck} label="Record">
       {deck.match_wins}-{deck.match_losses}-{deck.match_draws}
@@ -41,7 +46,12 @@
     <.table id={"rounds-#{event_id}"} rows={rounds}>
       <:col :let={round} label="Round">{round.round}</:col>
       <:col :let={round} label="Opponent">
-        {round.opp_first_name} {String.first(round.opp_last_name)}.
+        <.link
+          navigate={~p"/players/#{round.opp_player_id}"}
+          class="text-blue-600 underline hover:text-blue-800"
+        >
+          {round.opp_first_name} {String.first(round.opp_last_name)}.
+        </.link>
       </:col>
       <:col :let={round} label="Result">
         {round.match_wins}-{round.match_losses}-{round.match_draws}

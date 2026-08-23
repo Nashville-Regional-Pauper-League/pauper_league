@@ -14,7 +14,10 @@
 <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
   <.table id="specialists" rows={@specialists}>
     <:col :let={specialist} label="Player">
-      <.link navigate={~p"/players/#{specialist.player_id}"} class="hover:underline">
+      <.link
+        navigate={~p"/players/#{specialist.player_id}"}
+        class="text-blue-600 underline hover:text-blue-800"
+      >
         {specialist.player_first_name} {String.first(specialist.player_last_name)}.
       </.link>
     </:col>
@@ -36,7 +39,10 @@
 <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
   <.table id="matchups" rows={@matchups}>
     <:col :let={matchup} label="Opp Deck">
-      <.link navigate={~p"/decks/#{matchup.opp_deck_id}"} class="hover:underline">
+      <.link
+        navigate={~p"/decks/#{matchup.opp_deck_id}"}
+        class="text-blue-600 underline hover:text-blue-800"
+      >
         {matchup.opp_deck_name}
       </.link>
     </:col>

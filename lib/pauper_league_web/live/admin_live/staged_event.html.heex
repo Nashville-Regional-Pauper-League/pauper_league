@@ -23,7 +23,10 @@
   <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
     <.table id="standings" rows={@standings}>
       <:col :let={player} label="Deck">
-        <.link navigate={~p"/players/#{player.player_id}"} class="hover:underline">
+        <.link
+          navigate={~p"/players/#{player.player_id}"}
+          class="text-blue-600 underline hover:text-blue-800"
+        >
           {player.player_first_name} {String.first(player.player_last_name)}.
         </.link>
       </:col>
@@ -31,7 +34,10 @@
         <div class="flex gap-4 justify-between items-center">
           <div class="flex-1">
             <%= if not is_nil(player.deck_id) do %>
-              <.link navigate={~p"/decks/#{player.deck_id}"} class="hover:underline">
+              <.link
+                navigate={~p"/decks/#{player.deck_id}"}
+                class="text-blue-600 underline hover:text-blue-800"
+              >
                 <div class="bg-green-300 px-3">{player.deck_name}</div>
               </.link>
             <% else %>

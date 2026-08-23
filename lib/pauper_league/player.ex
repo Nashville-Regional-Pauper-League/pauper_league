@@ -132,6 +132,7 @@ defmodule PauperLeague.Player do
         match_losses: mr.losses,
         match_draws: mr.draws,
         match_bye: mr.is_bye,
+        opp_player_id: opp.id,
         opp_first_name: opp.first_name,
         opp_last_name: opp.last_name
       }
