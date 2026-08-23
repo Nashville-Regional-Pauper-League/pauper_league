@@ -183,6 +183,7 @@ defmodule PauperLeague.DeckArchetype do
       join: e in PauperLeague.Seasons.Event,
       on: et.event_id == e.id,
       where: e.season_id == ^season_id,
+      where: d.name != "Unknown",
       group_by: [d.id, d.name],
       select: %{
         deck_id: d.id,
@@ -210,7 +211,6 @@ defmodule PauperLeague.DeckArchetype do
       join: et in PauperLeague.Seasons.Event.EventTeam,
       on: et.deck_archetype_id == d.id,
       where: et.event_id == ^event_id,
-      where: d.name != "Unknown",
       group_by: [d.id, d.name],
       select: %{
         deck_id: d.id,
