@@ -16,7 +16,10 @@
     <.table id="players" scrollable={true} rows={@leaderboard}>
       <:col :let={player} label="">{player.rank}</:col>
       <:col :let={player} label="Name">
-        <.link navigate={~p"/players/#{player.player_id}"} class="hover:underline">
+        <.link
+          navigate={~p"/players/#{player.player_id}"}
+          class="text-blue-600 underline hover:text-blue-800"
+        >
           {player.first_name} {String.first(player.last_name)}.
         </.link>
       </:col>
