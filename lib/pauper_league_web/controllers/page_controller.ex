@@ -4,7 +4,9 @@ defmodule PauperLeagueWeb.PageController do
   import Ecto.Query
 
   def home(conn, _params) do
-    render(conn, :home)
+    conn
+    |> assign(:title, "First Season: Aug. 23 - Dec. 12")
+    |> render(:home)
   end
 
   def board(conn, %{"season_id" => season_id}) do
