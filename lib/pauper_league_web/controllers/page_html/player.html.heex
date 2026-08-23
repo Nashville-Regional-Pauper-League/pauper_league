@@ -34,7 +34,9 @@
 <%= for {{event_id, date, store, season}, rounds} <- @player.events do %>
   <div class="overflow-hidden mt-4 rounded-2xl bg-zinc-100 shadow-lg ring-1 ring-white/10">
     <div class="bg-[#47613E] text-white p-3">
-      <.link navigate={~p"/"} class="font-bold">{store} | {date} | {season}</.link>
+      <.link navigate={~p"/events/#{event_id}"} class="font-bold">
+        {store} | {date} | {season}
+      </.link>
     </div>
     <.table id={"rounds-#{event_id}"} rows={rounds}>
       <:col :let={round} label="Round">{round.round}</:col>
