@@ -13,7 +13,7 @@
 </div>
 <div class="hidden md:block">
   <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
-    <.table id="players" scrollable={true} rows={@leaderboard}>
+    <.table id="players" rows={@leaderboard}>
       <:col :let={player} label="">{player.rank}</:col>
       <:col :let={player} label="Name">
         <.link
@@ -34,7 +34,7 @@
 </div>
 <div class="visible md:hidden">
   <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
-    <.table id="players" scrollable={true} rows={@leaderboard}>
+    <.table id="players" rows={@leaderboard}>
       <:col :let={player} label="">{player.rank}</:col>
       <:col :let={player} label="Name">
         <.link
