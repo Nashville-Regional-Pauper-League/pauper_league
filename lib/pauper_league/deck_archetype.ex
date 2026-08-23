@@ -198,7 +198,7 @@ defmodule PauperLeague.DeckArchetype do
     event_id =
       PauperLeague.Seasons.Event
       |> select([e], e.id)
-      |> order_by([e], e.event_date)
+      |> order_by([e], desc: e.event_date)
       |> limit(1)
       |> Repo.one()
 
@@ -210,6 +210,7 @@ defmodule PauperLeague.DeckArchetype do
       join: et in PauperLeague.Seasons.Event.EventTeam,
       on: et.deck_archetype_id == d.id,
       where: et.event_id == ^event_id,
+      where: d.name != "Unknown",
       group_by: [d.id, d.name],
       select: %{
         deck_id: d.id,
