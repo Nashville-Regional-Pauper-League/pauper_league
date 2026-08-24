@@ -27,7 +27,7 @@ defmodule PauperLeague.Stage.Event do
     PauperLeague.Stage.Event |> Repo.delete_all()
   end
 
-  def stage_event_from_raw(raw_event_id, season_id \\ 1) do
+  def stage_event_from_raw(raw_event_id, season_id \\ 2) do
     raw_event = PauperLeague.Stores.RawEvent |> Repo.get(raw_event_id)
 
     params = %{
