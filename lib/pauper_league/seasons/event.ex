@@ -44,7 +44,7 @@ defmodule PauperLeague.Seasons.Event do
     |> Repo.insert()
   end
 
-  def create_event_from_raw(raw_event_id, season_id \\ 2) do
+  def create_event_from_raw(raw_event_id, season_id \\ 1) do
     raw_event = PauperLeague.Stores.RawEvent |> Repo.get(raw_event_id)
 
     params = %{
