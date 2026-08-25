@@ -1,33 +1,35 @@
 <.flash_group flash={@flash} />
-<div class="rounded-xl mb-4 bg-white p-4 md:hidden">
+<div class="rounded-xl mb-2 bg-white p-4 md:hidden">
   Compete in our weekly Magic: The Gathering Pauper Format events to earn a spot at the season invitational! See the
   <.link navigate={~p"/rules"} class="text-blue-600 underline hover:text-blue-800">
     rules page
   </.link>
   for more infomation.
 </div>
-<section class="p-4 sm:p-0">
+<section class="p-0 min-[390px]:p-3">
   <div class="m-auto">
-    <h2 class="font-serif tracking-wide text-center mb-4 text-4xl">Weekly League Nights</h2>
+    <h2 class="font-serif tracking-wide text-center mb-4 text-3xl md:text-4xl">
+      Weekly League Nights
+    </h2>
 
-    <div class="flex flex-wrap gap-3 justify-evenly">
-      <div class="rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] px-6">
+    <div class="flex flex-wrap gap-2 justify-between min-[380px]:justify-evenly text-sm sm:text-base">
+      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[45vw] md:max-w-none md:px-6">
         <img
-          class="mx-auto block h-28 w-40 object-contain"
+          class="mx-auto block object-contain h-28 w-40"
           src="images/infinity-logo.png"
           alt="Infinity Game Lounge Logo"
         />
 
-        <h3 class="font-bold underline">Infinity Game Lounge</h3>
+        <h3 class="font-bold underline">Infinity <br />Game Lounge</h3>
 
         <div>
           <div>Mondays</div>
           <strong>7:00 PM</strong>
         </div>
       </div>
-      <div class="rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] px-6">
+      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[45vw] md:max-w-none md:px-6">
         <img
-          class="mx-auto block h-28 w-40 object-contain"
+          class="mx-auto block object-contain h-28 w-40"
           src="images/game-lodge-logo.jpg"
           alt="The Game Lodge Logo"
         />
@@ -40,9 +42,9 @@
         </div>
       </div>
 
-      <div class="rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] px-6">
+      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[45vw] md:max-w-none md:px-6">
         <img
-          class="mx-auto block h-28 w-40 object-contain"
+          class="mx-auto block object-contain h-28 w-40"
           src="images/game-knight-logo.png"
           alt="Game Knight Logo"
         />
@@ -54,9 +56,9 @@
           <strong>6:00 PM</strong>
         </div>
       </div>
-      <div class="rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] px-6">
+      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[45vw] md:max-w-none md:px-6">
         <img
-          class="mx-auto block h-28 w-40 object-contain"
+          class="mx-auto block object-contain h-28 w-40"
           src="images/mid-tn-gaming-logo.png"
           alt="Middle TN Gaming Logo"
         />
