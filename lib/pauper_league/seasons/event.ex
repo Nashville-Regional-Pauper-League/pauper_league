@@ -106,6 +106,7 @@ defmodule PauperLeague.Seasons.Event do
       select: %{
         id: e.id,
         event_id: e.id,
+        eventlink_id: e.eventlink_id,
         event_date: e.event_date,
         store_id: st.id,
         store_name: st.name,
@@ -128,9 +129,10 @@ defmodule PauperLeague.Seasons.Event do
       join: mr in PauperLeague.Seasons.Event.MatchResult,
       on: mr.event_team_id == et.id,
       where: e.id == ^event_id,
-      group_by: [p.id, p.first_name, p.last_name, d.id, d.name],
+      group_by: [p.id, et.id, p.first_name, p.last_name, d.id, d.name],
       select: %{
         player_id: p.id,
+        event_team_id: et.id,
         player_first_name: p.first_name,
         player_last_name: p.last_name,
         deck_id: d.id,
