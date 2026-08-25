@@ -82,7 +82,7 @@ defmodule PauperLeagueWeb.PageController do
   end
 
   def events(conn, _) do
-    event_list = PauperLeague.Seasons.Event.get_events_by_season(1)
+    event_list = PauperLeague.Seasons.Event.get_all_events()
 
     conn
     |> assign(:title, "Events")

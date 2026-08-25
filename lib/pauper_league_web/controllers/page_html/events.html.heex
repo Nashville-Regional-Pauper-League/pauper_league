@@ -6,6 +6,9 @@
     <:col :let={event} label="Store">
       {event.store_name}
     </:col>
+    <:col :let={event} label="Season">
+      {event.season_name}
+    </:col>
     <:col :let={event}>
       <.link
         navigate={~p"/events/#{event.event_id}"}

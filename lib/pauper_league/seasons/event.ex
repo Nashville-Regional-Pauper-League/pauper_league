@@ -62,6 +62,25 @@ defmodule PauperLeague.Seasons.Event do
     |> Repo.insert()
   end
 
+  def get_all_events do
+    from(e in __MODULE__,
+      join: st in PauperLeague.Stores.Store,
+      on: e.store_id == st.id,
+      join: season in PauperLeague.Seasons.Season,
+      on: e.season_id == season.id,
+      order_by: [desc: e.event_date],
+      select: %{
+        event_id: e.id,
+        event_date: e.event_date,
+        season_id: season.id,
+        season_name: season.name,
+        store_id: st.id,
+        store_name: st.name
+      }
+    )
+    |> Repo.all()
+  end
+
   def get_events_by_season(season_id) do
     from(e in __MODULE__,
       join: st in PauperLeague.Stores.Store,
