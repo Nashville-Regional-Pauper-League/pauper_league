@@ -70,10 +70,16 @@ defmodule PauperLeague.Player do
 
     if not is_nil(player) do
       win_rate =
-        Float.round(
-          100 * player.match_wins / (player.match_wins + player.match_losses + player.match_draws),
-          1
-        )
+        if not is_nil(player.match_wins) and not is_nil(player.match_losses) and
+             not is_nil(player.match_draws) do
+          Float.round(
+            100 * player.match_wins /
+              (player.match_wins + player.match_losses + player.match_draws),
+            1
+          )
+        else
+          0
+        end
 
       trophies =
         get_event_trophy_status(player_id)
