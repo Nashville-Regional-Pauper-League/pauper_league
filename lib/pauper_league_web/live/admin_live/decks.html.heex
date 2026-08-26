@@ -1,0 +1,15 @@
+<.back navigate={~p"/admin"}>back</.back>
+<.form for={@form} phx-change="create-deck">
+  <.live_select_creation
+    id="deck-choice"
+    field={@form[:deck_archetype_name]}
+    label="Add deck (hit enter to add)"
+    update_min_len={0}
+    options={@default_decks}
+  />
+</.form>
+<div class="h-px my-4 flex-1 bg-slate-600"></div>
+<div class="font-bold underline">Existing Deck Archetypes</div>
+<%= for deck <- @default_decks do %>
+  <div>{deck.label}</div>
+<% end %>

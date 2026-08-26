@@ -9,7 +9,10 @@ defmodule PauperLeague.DeckArchetype do
   end
 
   def all do
-    from(da in __MODULE__) |> select([da], %{label: da.name, value: da.id}) |> Repo.all()
+    from(da in __MODULE__)
+    |> select([da], %{label: da.name, value: da.id})
+    |> order_by([da], da.name)
+    |> Repo.all()
   end
 
   def deck_view(deck_id) do

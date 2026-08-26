@@ -88,6 +88,7 @@ defmodule PauperLeagueWeb.Router do
     live_session :admin,
       on_mount: [{PauperLeagueWeb.UserAuth, :ensure_authenticated}] do
       live "/stores/:store_id", AdminLive.Store, :store
+      live "/decks", AdminLive.Decks, :decks
       live "/staged/events/:stage_event_id", AdminLive.StagedEvent, :staged_event
       live "/published/events/:published_event_id", AdminLive.PublishedEvent, :published_event
     end
