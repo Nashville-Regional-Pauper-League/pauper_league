@@ -30,9 +30,9 @@ defmodule PauperLeague.Player do
   def player_view(player_id) do
     player =
       from(p in __MODULE__,
-        join: etp in PauperLeague.Seasons.Event.TeamPlayer,
+        left_join: etp in PauperLeague.Seasons.Event.TeamPlayer,
         on: etp.player_id == p.id,
-        join: mr in PauperLeague.Seasons.Event.MatchResult,
+        left_join: mr in PauperLeague.Seasons.Event.MatchResult,
         on: etp.event_team_id == mr.event_team_id,
         group_by: [p.id, p.first_name, p.last_name],
         select: %{
