@@ -52,7 +52,7 @@
           </.button>
         </td>
         <td>
-          <%= if event.completed_rounds == 3 and is_nil(event.stage_event_id) do %>
+          <%= if event.eventlink_status in ["ROUNDCERTIFIED", "ENDED", "EXPIRED"] and event.completed_rounds == 3 and is_nil(event.stage_event_id) do %>
             <.button phx-click="stage_event" value={event.id}>
               Stage Event
             </.button>
