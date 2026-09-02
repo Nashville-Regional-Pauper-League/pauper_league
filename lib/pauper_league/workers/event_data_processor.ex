@@ -15,7 +15,11 @@ defmodule PauperLeague.Workers.EventDataProcessor do
 
     # update event date
     {:ok, start_time_str} = Utils.get_value(raw_event_data, "scheduledStartTime", :string)
-    date = get_date_from_time(start_time_str) |> DateTime.to_date()
+
+    date =
+      get_date_from_time(start_time_str)
+      |> DateTime.shift_zone!("America/Chicago")
+      |> DateTime.to_date()
 
     # update title, description, status
     {:ok, title} = Utils.get_value(raw_event_data, "title", :string)
