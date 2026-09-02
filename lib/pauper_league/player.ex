@@ -34,6 +34,7 @@ defmodule PauperLeague.Player do
         on: etp.player_id == p.id,
         left_join: mr in PauperLeague.Seasons.Event.MatchResult,
         on: etp.event_team_id == mr.event_team_id,
+        where: not mr.is_bye,
         group_by: [p.id, p.first_name, p.last_name],
         select: %{
           first_name: p.first_name,
@@ -90,12 +91,25 @@ defmodule PauperLeague.Player do
 
       decks = get_decks(player_id)
 
+      byes =
+        from(p in __MODULE__,
+          left_join: etp in PauperLeague.Seasons.Event.TeamPlayer,
+          on: etp.player_id == p.id,
+          left_join: mr in PauperLeague.Seasons.Event.MatchResult,
+          on: etp.event_team_id == mr.event_team_id,
+          where: mr.is_bye,
+          where: p.id == ^player_id,
+          select: count(mr.id)
+        )
+        |> Repo.one()
+
       player_details = %{
         record: "#{player.match_wins}-#{player.match_losses}-#{player.match_draws}",
         win_rate: "#{win_rate}%",
         trophies: trophies,
         events: events,
-        decks: decks
+        decks: decks,
+        byes: byes
       }
 
       {:ok, player |> Map.merge(player_details)}
