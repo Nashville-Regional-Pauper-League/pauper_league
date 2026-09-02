@@ -50,12 +50,16 @@
       <.table id={"rounds-#{event_id}"} rows={rounds}>
         <:col :let={round} label="Round">{round.round}</:col>
         <:col :let={round} label="Opponent">
-          <.link
-            navigate={~p"/players/#{round.opp_player_id}"}
-            class="text-blue-600 underline hover:text-blue-800"
-          >
-            {round.opp_first_name} {String.first(round.opp_last_name)}.
-          </.link>
+          <%= if not is_nil(round.opp_player_id) do %>
+            <.link
+              navigate={~p"/players/#{round.opp_player_id}"}
+              class="text-blue-600 underline hover:text-blue-800"
+            >
+              {round.opp_first_name} {String.first(round.opp_last_name)}.
+            </.link>
+          <% else %>
+            <i>Bye</i>
+          <% end %>
         </:col>
         <:col :let={round} label="Result">
           {round.match_wins}-{round.match_losses}-{round.match_draws}
