@@ -11,6 +11,8 @@ config :pauper_league, PauperLeagueWeb.Endpoint,
 # Configures Swoosh API Client
 config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: PauperLeague.Finch
 
+config :elixir, :time_zone_database, Tz.TimeZoneDatabase
+
 # Disable Swoosh Local Memory Storage
 config :swoosh, local: false
 
