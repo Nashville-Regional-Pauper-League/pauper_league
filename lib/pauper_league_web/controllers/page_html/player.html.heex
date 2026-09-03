@@ -1,4 +1,4 @@
-<div class="font-bold text-3xl mt-3">{@player.first_name} {String.first(@player.last_name)}.</div>
+<div class="font-bold text-3xl mt-3">{@player.first_name} {@player.last_name}</div>
 <div class="font-semibold text-xl">
   Record: {@player.record} ({@player.win_rate}) | Total 3-0s: {@player.trophies} | Byes: {@player.byes}
 </div>
@@ -55,7 +55,7 @@
               navigate={~p"/players/#{round.opp_player_id}"}
               class="text-blue-600 underline hover:text-blue-800"
             >
-              {round.opp_first_name} {String.first(round.opp_last_name)}.
+              {round.opp_first_name} {round.opp_last_name}
             </.link>
           <% else %>
             <i>Bye</i>

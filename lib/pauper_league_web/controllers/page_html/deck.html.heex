@@ -18,7 +18,7 @@
         navigate={~p"/players/#{specialist.player_id}"}
         class="text-blue-600 underline hover:text-blue-800"
       >
-        {specialist.player_first_name} {String.first(specialist.player_last_name)}.
+        {specialist.player_first_name} {specialist.player_last_name}
       </.link>
     </:col>
     <:col :let={specialist} label="Record">
