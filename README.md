@@ -2,6 +2,8 @@
 
 Repository for the Nashville Regional Pauper League website.
 
+https://www.pauperleague.com
+
 ## Learn more about Elixir and Phoenix
 
   * Official website: https://www.phoenixframework.org/
