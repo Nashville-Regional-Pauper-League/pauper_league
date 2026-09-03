@@ -19,14 +19,13 @@ defmodule PauperLeagueWeb.AdminLive.PublishedEvent do
 
   @impl true
   def handle_params(%{"published_event_id" => stage_event_id} = _params, _, socket) do
-    event = PauperLeague.Seasons.Event.event_view(stage_event_id) |> IO.inspect()
+    event = PauperLeague.Seasons.Event.event_view(stage_event_id)
 
     season_event =
       PauperLeague.Seasons.Event
       |> PauperLeague.Repo.get_by(eventlink_id: event.eventlink_id)
-      |> IO.inspect()
 
-    season_event_id = if not is_nil(season_event), do: season_event.id, else: nil |> IO.inspect()
+    season_event_id = if not is_nil(season_event), do: season_event.id, else: nil
 
     standings =
       PauperLeague.Seasons.Event.standings(stage_event_id)
@@ -36,7 +35,6 @@ defmodule PauperLeagueWeb.AdminLive.PublishedEvent do
       |> Enum.filter(fn p -> is_nil(p.deck_id) end)
       |> length()
       |> Kernel.==(0)
-      |> IO.inspect(label: "ready to publish")
 
     {:noreply,
      socket
@@ -83,7 +81,6 @@ defmodule PauperLeagueWeb.AdminLive.PublishedEvent do
       |> Enum.filter(fn p -> is_nil(p.deck_id) end)
       |> length()
       |> Kernel.==(0)
-      |> IO.inspect(label: "ready to publish")
 
     {:noreply,
      socket

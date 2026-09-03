@@ -129,7 +129,6 @@ defmodule PauperLeague.Seasons.Event.RoundMatch do
           %PauperLeague.Seasons.Event.MatchResult{}
           |> change(match_result_params)
           |> Repo.insert()
-          |> IO.inspect()
         end)
       end)
     end)

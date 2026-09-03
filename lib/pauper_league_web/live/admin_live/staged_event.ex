@@ -1,7 +1,6 @@
 defmodule PauperLeagueWeb.AdminLive.StagedEvent do
   use PauperLeagueWeb, :live_view
 
-  # import Ecto.Query
   import Ecto.Changeset
   alias PauperLeague.Repo
   @impl true
@@ -35,7 +34,6 @@ defmodule PauperLeagueWeb.AdminLive.StagedEvent do
       |> Enum.filter(fn p -> is_nil(p.deck_id) end)
       |> length()
       |> Kernel.==(0)
-      |> IO.inspect(label: "ready to publish")
 
     {:noreply,
      socket
@@ -82,7 +80,6 @@ defmodule PauperLeagueWeb.AdminLive.StagedEvent do
       |> Enum.filter(fn p -> is_nil(p.deck_id) end)
       |> length()
       |> Kernel.==(0)
-      |> IO.inspect(label: "ready to publish")
 
     {:noreply,
      socket

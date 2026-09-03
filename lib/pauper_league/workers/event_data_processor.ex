@@ -42,19 +42,15 @@ defmodule PauperLeague.Workers.EventDataProcessor do
 
     # add new players
     {:ok, players} = Utils.get_value(raw_event_data, "registeredPlayers", :list)
-    # players |> Enum.each(fn p -> IO.inspect({p["firstName"], p["status"], p["personaId"]}) end)
 
     player_params =
       players
       |> Enum.filter(fn p ->
         keep_in = p["firstName"] != "[REDACTED]" or p["status"] == "GUEST"
-        # IO.inspect({p["firstName"], p["status"], keep_in})
         keep_in
       end)
       |> Enum.uniq_by(fn p -> p["personaId"] end)
       |> Enum.map(fn p ->
-        # IO.inspect({p["firstName"], p["status"], p["personaId"]})
-
         %{
           first_name: p["firstName"],
           last_name: p["lastName"],

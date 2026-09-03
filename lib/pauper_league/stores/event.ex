@@ -22,29 +22,6 @@ defmodule PauperLeague.Stores.RawEvent do
     timestamps()
   end
 
-  def check_status(event_id) do
-    event_rounds =
-      PauperLeague.Stores.RawEventRound
-      |> where([e], e.round_no in [1, 2, 3])
-      |> Repo.all_by(event_id: event_id)
-
-    # IO.inspect(length(event_rounds) == 3, label: "Has 3 rounds")
-
-    rounds_with_results =
-      event_rounds
-      |> Enum.filter(fn %{data: round} ->
-        matches = round |> Map.get("rounds") |> hd() |> Map.get("matches")
-        # all matches have results
-        matches_with_results =
-          matches |> Enum.filter(fn match -> not is_nil(match["results"]) end)
-
-        length(matches) == length(matches_with_results)
-      end)
-
-    length(rounds_with_results) == 3
-    # IO.inspect(length(rounds_with_results) == 3, label: "Has 3 rounds with results")
-  end
-
   def all_round_data do
     PauperLeague.Stores.RawEventRound
     |> where([ed], ed.round_no in [1, 2, 3])

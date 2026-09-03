@@ -132,10 +132,10 @@ defmodule PauperLeague.EventlinkApi do
           organizationId: store_id,
           page: 0,
           pageSize: 250,
-          # Need to change to dynamic dates
           startDate: start_time,
           endDate: end_time,
           searchText: "",
+          # Pauper format id - not filtering here for now
           # formatIds: ["7uyjldU9xB1IhLH6SY6UFf"],
           formatIds: [],
           rulesEnforcementLevels: [],
