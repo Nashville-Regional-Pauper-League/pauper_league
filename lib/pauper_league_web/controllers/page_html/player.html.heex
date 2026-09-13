@@ -44,12 +44,19 @@
   <div class="h-px flex-1 bg-slate-600"></div>
 </div>
 <%= if not is_nil(@player.events) and not Enum.empty?(@player.events) do %>
-  <%= for {{event_id, date, store, season}, rounds} <- @player.events do %>
+  <%= for {{event_id, date, store, season, deck_id, deck_name}, rounds} <- @player.events do %>
     <div class="overflow-hidden mt-4 rounded-2xl bg-zinc-100 shadow-lg ring-1 ring-white/10">
       <div class="bg-[#47613E] text-white p-3">
-        <.link navigate={~p"/events/#{event_id}"} class="font-bold">
-          {store} | {date} | {season}
-        </.link>
+        <div>
+          <.link navigate={~p"/events/#{event_id}"} class="font-bold">
+            <u>{store}</u> | {date} | {season}
+          </.link>
+        </div>
+        <div>
+          <.link navigate={~p"/decks/#{deck_id}"} class="underline italic">
+            {deck_name}
+          </.link>
+        </div>
       </div>
       <.table id={"rounds-#{event_id}"} rows={rounds}>
         <:col :let={round} label="Round">{round.round}</:col>
@@ -64,6 +71,14 @@
           <% else %>
             <i>Bye</i>
           <% end %>
+        </:col>
+        <:col :let={round} label="Opp deck">
+          <.link
+            navigate={~p"/decks/#{round.opp_deck_id}"}
+            class="text-blue-600 underline hover:text-blue-800"
+          >
+            {round.opp_deck_name}
+          </.link>
         </:col>
         <:col :let={round} label="Result">
           {round.match_wins}-{round.match_losses}-{round.match_draws}

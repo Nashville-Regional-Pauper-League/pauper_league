@@ -125,6 +125,10 @@ defmodule PauperLeague.Player do
     from(p in __MODULE__,
       join: etp in PauperLeague.Seasons.Event.TeamPlayer,
       on: etp.player_id == p.id,
+      join: et in PauperLeague.Seasons.Event.EventTeam,
+      on: etp.event_team_id == et.id,
+      join: deck in PauperLeague.DeckArchetype,
+      on: deck.id == et.deck_archetype_id,
       join: mr in PauperLeague.Seasons.Event.MatchResult,
       on: etp.event_team_id == mr.event_team_id,
       join: rm in PauperLeague.Seasons.Event.RoundMatch,
@@ -133,6 +137,10 @@ defmodule PauperLeague.Player do
       on: mr_opp.event_round_match_id == rm.id and mr.id != mr_opp.id,
       left_join: etp_opp in PauperLeague.Seasons.Event.TeamPlayer,
       on: etp_opp.event_team_id == mr_opp.event_team_id,
+      join: et_opp in PauperLeague.Seasons.Event.EventTeam,
+      on: etp_opp.event_team_id == et_opp.id,
+      join: deck_opp in PauperLeague.DeckArchetype,
+      on: deck_opp.id == et_opp.deck_archetype_id,
       left_join: opp in PauperLeague.Player,
       on: etp_opp.player_id == opp.id,
       join: r in PauperLeague.Seasons.Event.Round,
@@ -155,14 +163,20 @@ defmodule PauperLeague.Player do
         match_losses: mr.losses,
         match_draws: mr.draws,
         match_bye: mr.is_bye,
+        player_deck_id: deck.id,
+        player_deck_name: deck.name,
+        opp_deck_id: deck_opp.id,
+        opp_deck_name: deck_opp.name,
         opp_player_id: opp.id,
         opp_first_name: opp.first_name,
         opp_last_name: opp.last_name
       }
     )
     |> Repo.all()
-    |> Enum.group_by(fn e -> {e.event_id, e.event_date, e.store, e.season} end)
-    |> Enum.sort_by(fn {{_, event_date, _, _}, _} -> event_date end, {:desc, Date})
+    |> Enum.group_by(fn e ->
+      {e.event_id, e.event_date, e.store, e.season, e.player_deck_id, e.player_deck_name}
+    end)
+    |> Enum.sort_by(fn {{_, event_date, _, _, _, _}, _} -> event_date end, {:desc, Date})
   end
 
   def get_event_trophy_status(player_id) do
