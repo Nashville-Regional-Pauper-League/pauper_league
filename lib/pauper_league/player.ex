@@ -141,6 +141,7 @@ defmodule PauperLeague.Player do
             match_draws: match_draws
           }
         end)
+        |> Enum.filter(fn match -> not is_nil(match.opp_player_id) end)
         |> Enum.sort_by(fn match -> [match.total_matches, match.match_wins] end, :desc)
         |> IO.inspect()
 
