@@ -87,7 +87,14 @@ defmodule PauperLeague.Player do
         |> Enum.filter(fn event -> event.trophied end)
         |> Enum.count()
 
-      events = get_events(player_id)
+      event_history = event_history_query(player_id) |> Repo.all()
+
+      events =
+        event_history
+        |> Enum.group_by(fn e ->
+          {e.event_id, e.event_date, e.store, e.season, e.player_deck_id, e.player_deck_name}
+        end)
+        |> Enum.sort_by(fn {{_, event_date, _, _, _, _}, _} -> event_date end, {:desc, Date})
 
       decks = get_decks(player_id)
 
@@ -105,6 +112,38 @@ defmodule PauperLeague.Player do
         )
         |> Repo.one()
 
+      opp_matchups =
+        event_history
+        |> Enum.group_by(fn e ->
+          {e.opp_player_id, e.opp_first_name, e.opp_last_name}
+        end)
+        |> Enum.map(fn {{opp_player_id, opp_first_name, opp_last_name}, match_list} ->
+          %{
+            match_wins: match_wins,
+            match_losses: match_losses,
+            match_draws: match_draws
+          } =
+            match_list
+            |> Enum.reduce(%{match_wins: 0, match_losses: 0, match_draws: 0}, fn match, acc ->
+              acc
+              |> Map.update(:match_wins, 0, fn n -> n + match.match_wins end)
+              |> Map.update(:match_losses, 0, fn n -> n + match.match_losses end)
+              |> Map.update(:match_draws, 0, fn n -> n + match.match_draws end)
+            end)
+
+          %{
+            opp_player_id: opp_player_id,
+            opp_first_name: opp_first_name,
+            opp_last_name: opp_last_name,
+            total_matches: match_wins + match_losses + match_draws,
+            match_wins: match_wins,
+            match_losses: match_losses,
+            match_draws: match_draws
+          }
+        end)
+        |> Enum.sort_by(fn match -> [match.total_matches, match.match_wins] end, :desc)
+        |> IO.inspect()
+
       player_details = %{
         record: "#{player.match_wins}-#{player.match_losses}-#{player.match_draws}",
         win_rate: "#{win_rate}%",
@@ -112,7 +151,8 @@ defmodule PauperLeague.Player do
         events: events,
         decks: decks,
         byes: byes,
-        rank: rank
+        rank: rank,
+        opp_matchups: opp_matchups
       }
 
       {:ok, player |> Map.merge(player_details)}
@@ -121,7 +161,7 @@ defmodule PauperLeague.Player do
     end
   end
 
-  def get_events(player_id) do
+  def event_history_query(player_id) do
     from(p in __MODULE__,
       join: etp in PauperLeague.Seasons.Event.TeamPlayer,
       on: etp.player_id == p.id,
@@ -172,11 +212,6 @@ defmodule PauperLeague.Player do
         opp_last_name: opp.last_name
       }
     )
-    |> Repo.all()
-    |> Enum.group_by(fn e ->
-      {e.event_id, e.event_date, e.store, e.season, e.player_deck_id, e.player_deck_name}
-    end)
-    |> Enum.sort_by(fn {{_, event_date, _, _, _, _}, _} -> event_date end, {:desc, Date})
   end
 
   def get_event_trophy_status(player_id) do

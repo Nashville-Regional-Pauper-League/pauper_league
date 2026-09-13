@@ -87,3 +87,26 @@
     </div>
   <% end %>
 <% end %>
+<br />
+<%= if not is_nil(@player.opp_matchups) and not Enum.empty?(@player.opp_matchups) do %>
+  <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+    <.table id="matchups" rows={@player.opp_matchups}>
+      <:col :let={matchup} label="Opponent">
+        <.link
+          navigate={~p"/players/#{matchup.opp_player_id}"}
+          class="text-blue-600 underline hover:text-blue-800"
+        >
+          {matchup.opp_first_name} {matchup.opp_last_name}
+        </.link>
+      </:col>
+      <:col :let={matchup} label="Matches">{matchup.total_matches}</:col>
+      <:col :let={matchup} label="Record">
+        {matchup.match_wins}-{matchup.match_losses}-{matchup.match_draws}
+      </:col>
+
+      <:col :let={matchup} label="Win Rate">
+        {matchup.match_wins |> Kernel./(matchup.total_matches) |> Float.floor(2) |> Kernel.*(100)}%
+      </:col>
+    </.table>
+  </div>
+<% end %>
