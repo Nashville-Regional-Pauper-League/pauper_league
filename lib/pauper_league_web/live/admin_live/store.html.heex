@@ -29,7 +29,7 @@
         <td>{event.title}</td>
         <td>{event.event_date}</td>
         <td>{event.format}</td>
-        <td>{event.description}</td>
+        <td>{String.slice(event.description, 0..50)}...</td>
         <td>{event.eventlink_status}</td>
         <%!-- <td>{event.internal_state}</td> --%>
         <td class="text-center">{event.completed_rounds}</td>
