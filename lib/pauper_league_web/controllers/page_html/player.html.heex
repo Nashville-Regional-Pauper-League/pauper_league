@@ -105,7 +105,7 @@
       </:col>
 
       <:col :let={matchup} label="Win Rate">
-        {matchup.match_wins |> Kernel./(matchup.total_matches) |> Float.floor(2) |> Kernel.*(100)}%
+        {matchup.match_wins |> Kernel./(matchup.total_matches) |> Kernel.*(100) |> Float.floor(2)}%
       </:col>
     </.table>
   </div>

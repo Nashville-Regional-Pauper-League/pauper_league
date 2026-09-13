@@ -186,16 +186,45 @@ defmodule PauperLeague.DeckArchetype do
       join: e in PauperLeague.Seasons.Event,
       on: et.event_id == e.id,
       where: e.season_id == ^season_id,
+      join: mr in PauperLeague.Seasons.Event.MatchResult,
+      on: et.id == mr.event_team_id,
       where: d.name != "Unknown",
       group_by: [d.id, d.name],
       select: %{
         deck_id: d.id,
         deck_name: d.name,
-        count: count()
+        events: count(et.id, :distinct),
+        matches: count(),
+        match_wins:
+          sum(
+            fragment(
+              "CASE WHEN ? = 2 THEN 1 WHEN ? = 1 and ? = 0 THEN 1 ELSE 0 END",
+              mr.wins,
+              mr.wins,
+              mr.losses
+            )
+          ),
+        match_losses:
+          sum(
+            fragment(
+              "CASE WHEN ? = 2 THEN 1 WHEN ? = 1 and ? = 0 THEN 1 ELSE 0 END",
+              mr.losses,
+              mr.losses,
+              mr.wins
+            )
+          ),
+        match_draws:
+          sum(
+            fragment(
+              "CASE WHEN ? = ? THEN 1 ELSE 0 END",
+              mr.wins,
+              mr.losses
+            )
+          )
       }
     )
     |> Repo.all()
-    |> Enum.sort_by(fn d -> d.count end, :desc)
+    |> Enum.sort_by(fn d -> d.events end, :desc)
   end
 
   def get_decks_last_event do
