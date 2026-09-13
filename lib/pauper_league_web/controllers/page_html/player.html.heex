@@ -73,12 +73,16 @@
           <% end %>
         </:col>
         <:col :let={round} label="Opp deck">
-          <.link
-            navigate={~p"/decks/#{round.opp_deck_id}"}
-            class="text-blue-600 underline hover:text-blue-800"
-          >
-            {round.opp_deck_name}
-          </.link>
+          <%= if not is_nil(round.opp_deck_id) do %>
+            <.link
+              navigate={~p"/decks/#{round.opp_deck_id}"}
+              class="text-blue-600 underline hover:text-blue-800"
+            >
+              {round.opp_deck_name}
+            </.link>
+          <% else %>
+            ""
+          <% end %>
         </:col>
         <:col :let={round} label="Result">
           {round.match_wins}-{round.match_losses}-{round.match_draws}
@@ -87,7 +91,15 @@
     </div>
   <% end %>
 <% end %>
-<br />
+<div class="flex items-center gap-4 mt-3">
+  <div class="h-px flex-1 bg-slate-600"></div>
+
+  <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+    Matchups
+  </h2>
+
+  <div class="h-px flex-1 bg-slate-600"></div>
+</div>
 <%= if not is_nil(@player.opp_matchups) and not Enum.empty?(@player.opp_matchups) do %>
   <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
     <.table id="matchups" rows={@player.opp_matchups}>
