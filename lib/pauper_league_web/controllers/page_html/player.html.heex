@@ -1,4 +1,8 @@
-<div class="font-bold text-3xl mt-3">{@player.first_name} {@player.last_name}</div>
+<div class="font-bold text-3xl mt-3">
+  {@player.first_name} {@player.last_name} {if is_nil(@player.rank),
+    do: "",
+    else: "- \##{@player.rank}"}
+</div>
 <div class="font-semibold text-xl">
   Record: {@player.record} ({@player.win_rate}) | Total 3-0s: {@player.trophies} | Byes: {@player.byes}
 </div>

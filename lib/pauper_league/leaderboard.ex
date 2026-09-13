@@ -14,6 +14,17 @@ defmodule PauperLeague.Leaderboard do
   end
 
   def get_leaderboard_by_season(season_id) do
+    leaderboard_view_query(season_id)
+    |> Repo.all()
+    |> Enum.map(fn player ->
+      player
+      |> Map.put(:points, player.match_wins * 3 + player.match_draws * 1)
+    end)
+    |> Enum.sort_by(fn player -> player.points end, :desc)
+    |> Enum.with_index(fn player, index -> player |> Map.put(:rank, index + 1) end)
+  end
+
+  def leaderboard_view_query(season_id) do
     best_by_week =
       from(b in subquery(base_leaderboard_query(season_id)),
         order_by: [b.player_id, b.week, desc: b.match_wins],
@@ -43,13 +54,6 @@ defmodule PauperLeague.Leaderboard do
         match_draws: sum(player.match_draws) |> type(:integer)
       }
     )
-    |> Repo.all()
-    |> Enum.map(fn player ->
-      player
-      |> Map.put(:points, player.match_wins * 3 + player.match_draws * 1)
-    end)
-    |> Enum.sort_by(fn player -> player.points end, :desc)
-    |> Enum.with_index(fn player, index -> player |> Map.put(:rank, index + 1) end)
   end
 
   def base_leaderboard_query(season_id) do

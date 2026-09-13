@@ -91,6 +91,8 @@ defmodule PauperLeague.Player do
 
       decks = get_decks(player_id)
 
+      rank = get_rank(player_id)
+
       byes =
         from(p in __MODULE__,
           left_join: etp in PauperLeague.Seasons.Event.TeamPlayer,
@@ -109,7 +111,8 @@ defmodule PauperLeague.Player do
         trophies: trophies,
         events: events,
         decks: decks,
-        byes: byes
+        byes: byes,
+        rank: rank
       }
 
       {:ok, player |> Map.merge(player_details)}
@@ -245,5 +248,16 @@ defmodule PauperLeague.Player do
       deck
       |> Map.put(:win_rate, "#{Float.round(100 * deck.match_wins / deck.matches, 2)}%")
     end)
+  end
+
+  def get_rank(player_id) do
+    player_id |> IO.inspect(label: "player_id")
+
+    player_stats =
+      PauperLeague.Leaderboard.get_leaderboard_by_season()
+      |> Enum.find(fn player -> Integer.to_string(player.player_id) == player_id end)
+
+    (player_stats || %{})
+    |> Map.get(:rank)
   end
 end
