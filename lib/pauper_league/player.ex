@@ -126,9 +126,27 @@ defmodule PauperLeague.Player do
             match_list
             |> Enum.reduce(%{match_wins: 0, match_losses: 0, match_draws: 0}, fn match, acc ->
               acc
-              |> Map.update(:match_wins, 0, fn n -> n + match.match_wins end)
-              |> Map.update(:match_losses, 0, fn n -> n + match.match_losses end)
-              |> Map.update(:match_draws, 0, fn n -> n + match.match_draws end)
+              |> Map.update(:match_wins, 0, fn n ->
+                win =
+                  if match.game_wins == 2 or (match.game_wins == 1 and match.game_losses == 0),
+                    do: 1,
+                    else: 0
+
+                n + win
+              end)
+              |> Map.update(:match_losses, 0, fn n ->
+                loss =
+                  if match.game_losses == 2 or (match.game_losses == 1 and match.game_wins == 0),
+                    do: 1,
+                    else: 0
+
+                n + loss
+              end)
+              |> Map.update(:match_draws, 0, fn n ->
+                draw = if match.game_wins == match.game_losses, do: 1, else: 0
+
+                n + draw
+              end)
             end)
 
           %{
@@ -143,8 +161,6 @@ defmodule PauperLeague.Player do
         end)
         |> Enum.filter(fn match -> not is_nil(match.opp_player_id) end)
         |> Enum.sort_by(fn match -> [match.total_matches, match.match_wins] end, :desc)
-
-      # |> IO.inspect()
 
       player_details = %{
         record: "#{player.match_wins}-#{player.match_losses}-#{player.match_draws}",
@@ -201,9 +217,9 @@ defmodule PauperLeague.Player do
         store: st.name,
         season: s.name,
         round: r.round_number,
-        match_wins: mr.wins,
-        match_losses: mr.losses,
-        match_draws: mr.draws,
+        game_wins: mr.wins,
+        game_losses: mr.losses,
+        game_draws: mr.draws,
         match_bye: mr.is_bye,
         player_deck_id: deck.id,
         player_deck_name: deck.name,
