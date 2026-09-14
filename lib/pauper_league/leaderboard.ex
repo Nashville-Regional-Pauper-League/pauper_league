@@ -18,6 +18,7 @@ defmodule PauperLeague.Leaderboard do
     |> Repo.all()
     |> Enum.map(fn player ->
       player
+      |> Map.update(:bonus, 0, fn bonus -> bonus || 0 end)
       |> Map.put(:points, player.match_wins * 3 + player.match_draws * 1 + (player.bonus || 0))
     end)
     |> Enum.sort_by(fn player -> player.points end, :desc)
