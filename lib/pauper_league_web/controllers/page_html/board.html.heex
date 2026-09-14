@@ -11,6 +11,7 @@
     <% end %>
   </div>
 </div>
+<div>Note: Total Points column includes Bonus points</div>
 <div class="hidden md:block">
   <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
     <.table id="players" rows={@leaderboard}>
@@ -23,7 +24,10 @@
           {player.first_name} {player.last_name}
         </.link>
       </:col>
-      <:col :let={player} label="Points">{player.points}</:col>
+      <:col :let={player} label="Points">
+        {player.points}
+      </:col>
+      <:col :let={player} label="Bonus">({player.bonus})</:col>
       <:col :let={player} label="Wins">{player.match_wins}</:col>
       <:col :let={player} label="Losses">{player.match_losses}</:col>
       <:col :let={player} label="Draws">{player.match_draws}</:col>
@@ -45,6 +49,7 @@
         </.link>
       </:col>
       <:col :let={player} label="Points">{player.points}</:col>
+      <:col :let={player} label="Bonus">({player.bonus})</:col>
       <:col :let={player} label="Record">
         {player.match_wins}-{player.match_losses}-{player.match_draws}
       </:col>
