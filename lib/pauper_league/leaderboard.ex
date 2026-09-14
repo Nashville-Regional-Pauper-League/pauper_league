@@ -176,9 +176,11 @@ defmodule PauperLeague.Leaderboard do
                 case
                   when count(distinct ?) = 4 then 3
                   when count(distinct ?) = 3 then 2
+                  when count(distinct ?) = 2 then 1
                   else 0
                 end
               """,
+              months.store_id,
               months.store_id,
               months.store_id
             )
