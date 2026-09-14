@@ -21,7 +21,7 @@ defmodule PauperLeague.Leaderboard do
       |> Map.update(:bonus, 0, fn bonus -> bonus || 0 end)
       |> Map.put(:points, player.match_wins * 3 + player.match_draws * 1 + (player.bonus || 0))
     end)
-    |> Enum.sort_by(fn player -> player.points end, :desc)
+    |> Enum.sort_by(fn player -> [player.points, player.trophies] end, :desc)
     |> Enum.with_index(fn player, index -> player |> Map.put(:rank, index + 1) end)
   end
 
@@ -36,6 +36,13 @@ defmodule PauperLeague.Leaderboard do
           first_name: b.first_name,
           last_name: b.last_name,
           events: 1,
+          trophy:
+            fragment(
+              """
+                case when ? = 3 then 1 else 0 end
+              """,
+              b.match_wins
+            ),
           match_wins: b.match_wins,
           match_losses: b.match_losses,
           match_draws: b.match_draws
@@ -50,6 +57,7 @@ defmodule PauperLeague.Leaderboard do
           first_name: player.first_name,
           last_name: player.last_name,
           events: sum(player.events),
+          trophies: sum(player.trophy),
           matches:
             sum(player.match_wins + player.match_losses + player.match_draws) |> type(:integer),
           match_wins: sum(player.match_wins) |> type(:integer),
@@ -68,6 +76,7 @@ defmodule PauperLeague.Leaderboard do
         first_name: p.first_name,
         last_name: p.last_name,
         events: p.events,
+        trophies: p.trophies,
         matches: p.matches,
         match_wins: p.match_wins,
         match_losses: p.match_losses,
