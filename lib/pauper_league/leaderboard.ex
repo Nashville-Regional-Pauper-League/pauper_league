@@ -21,7 +21,7 @@ defmodule PauperLeague.Leaderboard do
       |> Map.update(:bonus, 0, fn bonus -> bonus || 0 end)
       |> Map.put(:points, player.match_wins * 3 + player.match_draws * 1 + (player.bonus || 0))
     end)
-    |> Enum.sort_by(fn player -> [player.points, player.trophies] end, :desc)
+    |> Enum.sort_by(fn player -> [player.points, player.events, player.trophies] end, :desc)
     |> Enum.with_index(fn player, index -> player |> Map.put(:rank, index + 1) end)
   end
 
@@ -35,7 +35,7 @@ defmodule PauperLeague.Leaderboard do
           week: b.week,
           first_name: b.first_name,
           last_name: b.last_name,
-          events: 1,
+          weeks: 1,
           trophy:
             fragment(
               """
@@ -56,7 +56,7 @@ defmodule PauperLeague.Leaderboard do
           player_id: player.player_id,
           first_name: player.first_name,
           last_name: player.last_name,
-          events: sum(player.events),
+          weeks: sum(player.weeks),
           trophies: sum(player.trophy),
           matches:
             sum(player.match_wins + player.match_losses + player.match_draws) |> type(:integer),
@@ -75,13 +75,14 @@ defmodule PauperLeague.Leaderboard do
         player_id: p.player_id,
         first_name: p.first_name,
         last_name: p.last_name,
-        events: p.events,
+        weeks: p.weeks,
         trophies: p.trophies,
         matches: p.matches,
         match_wins: p.match_wins,
         match_losses: p.match_losses,
         match_draws: p.match_draws,
-        bonus: b.bonus
+        bonus: b.bonus,
+        events: b.events
       }
     )
   end
@@ -155,6 +156,7 @@ defmodule PauperLeague.Leaderboard do
         where: b.matches == 3,
         select: %{
           player_id: b.player_id,
+          event_id: b.event_id,
           month:
             fragment(
               """
@@ -179,6 +181,7 @@ defmodule PauperLeague.Leaderboard do
         select: %{
           player_id: months.player_id,
           month: months.month,
+          events: count(months.event_id, :distinct),
           bonus:
             fragment(
               """
@@ -200,6 +203,7 @@ defmodule PauperLeague.Leaderboard do
       group_by: [player.player_id],
       select: %{
         player_id: player.player_id,
+        events: sum(player.events),
         bonus: sum(player.bonus)
       }
     )
