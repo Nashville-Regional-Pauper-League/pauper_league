@@ -3,9 +3,16 @@ defmodule PauperLeagueWeb.PageController do
 
   import Ecto.Query
 
+  @qualifier_list [
+    %{store: "The Game Lodge", date: ~D[2026-10-24]},
+    %{store: "The Game Knight", date: ~D[2026-11-21]},
+    %{store: "Infinity", date: ~D[2026-12-05]},
+    %{store: "Middle Tennessee Gaming", date: "TBD"}
+  ]
+
   def home(conn, _params) do
     conn
-    # |> assign(:title, "Season: Aug. 23 - Dec. 12")
+    |> assign(:qualifiers, @qualifier_list)
     |> render(:home)
   end
 
@@ -104,6 +111,7 @@ defmodule PauperLeagueWeb.PageController do
   def rules(conn, _) do
     conn
     |> assign(:title, "Rules")
+    |> assign(:qualifiers, @qualifier_list)
     |> render(:rules)
   end
 end

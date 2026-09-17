@@ -118,15 +118,6 @@
   <div class="m-auto">
     <div class="rounded-xl bg-[#47613E] p-4 text-white">
       <h2 class="mb-4 text-center text-[2.5rem]">How to Qualify</h2>
-
-      <%!-- <div class="mb-8 flex justify-center">
-        <a
-          class="inline-flex items-center gap-2 rounded-[10px] bg-white px-5 py-3 text-[24px] font-medium text-[#333] no-underline shadow-[0_2px_8px_rgba(0,0,0,0.15)] transition duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(0,0,0,0.2)]"
-          href="images/nrpl-poster.png"
-        >
-          Download League Info Flyer
-        </a>
-      </div> --%>
       <ul class="list-disc ml-[25px] text-[20px]">
         <li><strong>League Points:</strong> Finish in the Top 12 at the end of the season.</li>
 
@@ -152,5 +143,20 @@
         <li>Winning multiple qualifier invitations awards a first-round bye.</li>
       </ul>
     </div>
+  </div>
+  <div class="flex items-center gap-4 mt-3">
+    <div class="h-px flex-1 bg-slate-600"></div>
+
+    <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+      Upcoming Pauper Qualifiers
+    </h2>
+
+    <div class="h-px flex-1 bg-slate-600"></div>
+  </div>
+  <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+    <.table id="event_list" rows={@qualifiers}>
+      <:col :let={e} label="Store">{e.store}</:col>
+      <:col :let={e} label="Date">{e.date}</:col>
+    </.table>
   </div>
 </section>

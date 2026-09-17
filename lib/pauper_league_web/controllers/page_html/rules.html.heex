@@ -1,4 +1,28 @@
 <div class="my-4">
+  <div class="flex items-center gap-4 mt-3">
+    <div class="h-px flex-1 bg-slate-600"></div>
+
+    <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+      Upcoming Pauper Qualifiers
+    </h2>
+
+    <div class="h-px flex-1 bg-slate-600"></div>
+  </div>
+  <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
+    <.table id="event_list" rows={@qualifiers}>
+      <:col :let={e} label="Store">{e.store}</:col>
+      <:col :let={e} label="Date">{e.date}</:col>
+    </.table>
+  </div>
+  <div class="flex items-center gap-4 mt-3">
+    <div class="h-px flex-1 bg-slate-600"></div>
+
+    <h2 class="text-sm font-bold uppercase tracking-widest text-zinc-600">
+      Rules
+    </h2>
+
+    <div class="h-px flex-1 bg-slate-600"></div>
+  </div>
   <h3 class="text-xl mt-4">Format:</h3>
   <ul class="list-disc ml-4 text-lg">
     The Nashville Regional Pauper league allows players to compete for prizes and bragging rights! All events feature the Magic: The Gathering Pauper Format. This fun and affordable constructed format only allows players to use cards printed at the common rarity in their deck building.
