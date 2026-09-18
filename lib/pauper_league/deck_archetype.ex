@@ -16,6 +16,22 @@ defmodule PauperLeague.DeckArchetype do
   end
 
   def deck_view(deck_id) do
+    deck_with_mirrors =
+      from(d in __MODULE__,
+        join: et in PauperLeague.Seasons.Event.EventTeam,
+        on: et.deck_archetype_id == d.id,
+        join: mr in PauperLeague.Seasons.Event.MatchResult,
+        on: et.id == mr.event_team_id,
+        where: d.id == ^deck_id,
+        group_by: [d.id, d.name],
+        select: %{
+          deck_id: d.id,
+          deck_name: d.name,
+          matches: count()
+        }
+      )
+      |> Repo.one()
+
     deck =
       from(d in __MODULE__,
         join: et in PauperLeague.Seasons.Event.EventTeam,
@@ -23,6 +39,15 @@ defmodule PauperLeague.DeckArchetype do
         join: mr in PauperLeague.Seasons.Event.MatchResult,
         on: et.id == mr.event_team_id,
         where: d.id == ^deck_id,
+        join: rm in PauperLeague.Seasons.Event.RoundMatch,
+        on: mr.event_round_match_id == rm.id,
+        join: opp_mr in PauperLeague.Seasons.Event.MatchResult,
+        on: opp_mr.event_round_match_id == rm.id and opp_mr.event_team_id != mr.event_team_id,
+        join: opp_et in PauperLeague.Seasons.Event.EventTeam,
+        on: opp_mr.event_team_id == opp_et.id,
+        join: opp_deck in PauperLeague.DeckArchetype,
+        on: opp_et.deck_archetype_id == opp_deck.id,
+        where: d.id != opp_et.deck_archetype_id,
         group_by: [d.id, d.name],
         select: %{
           deck_id: d.id,
@@ -59,6 +84,7 @@ defmodule PauperLeague.DeckArchetype do
       |> Repo.one()
 
     deck
+    |> Map.put(:mirror_matches, deck_with_mirrors.matches - deck.matches)
     |> Map.put(:win_rate, "#{Float.round(100 * deck.match_wins / deck.matches, 2)}%")
   end
 
@@ -134,6 +160,7 @@ defmodule PauperLeague.DeckArchetype do
       join: opp_deck in PauperLeague.DeckArchetype,
       on: opp_et.deck_archetype_id == opp_deck.id,
       where: d.id == ^deck_id,
+      where: d.id != opp_et.deck_archetype_id,
       group_by: [opp_deck.id, opp_deck.name],
       select: %{
         opp_deck_id: opp_deck.id,
@@ -168,7 +195,6 @@ defmodule PauperLeague.DeckArchetype do
       }
     )
     |> Repo.all()
-    # |> Enum.filter(fn mu -> mu.matches > 5 end)
     |> Enum.sort_by(fn mu -> {mu.match_wins / mu.matches, mu.matches} end, :desc)
     |> Enum.map(fn mu ->
       mu
@@ -188,6 +214,13 @@ defmodule PauperLeague.DeckArchetype do
       where: e.season_id == ^season_id,
       join: mr in PauperLeague.Seasons.Event.MatchResult,
       on: et.id == mr.event_team_id,
+      join: rm in PauperLeague.Seasons.Event.RoundMatch,
+      on: mr.event_round_match_id == rm.id,
+      join: opp_mr in PauperLeague.Seasons.Event.MatchResult,
+      on: opp_mr.event_round_match_id == rm.id and opp_mr.event_team_id != mr.event_team_id,
+      join: opp_et in PauperLeague.Seasons.Event.EventTeam,
+      on: opp_mr.event_team_id == opp_et.id,
+      where: d.id != opp_et.deck_archetype_id,
       where: d.name != "Unknown",
       group_by: [d.id, d.name],
       select: %{
