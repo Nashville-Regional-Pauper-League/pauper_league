@@ -68,6 +68,16 @@ defmodule PauperLeague.Seasons.Event do
       on: e.store_id == st.id,
       join: season in PauperLeague.Seasons.Season,
       on: e.season_id == season.id,
+      join: etp in PauperLeague.Seasons.Event.EventTeam,
+      on: e.id == etp.event_id,
+      group_by: [
+        e.id,
+        e.event_date,
+        season.id,
+        season.name,
+        st.id,
+        st.name
+      ],
       order_by: [desc: e.event_date],
       select: %{
         event_id: e.id,
@@ -75,7 +85,8 @@ defmodule PauperLeague.Seasons.Event do
         season_id: season.id,
         season_name: season.name,
         store_id: st.id,
-        store_name: st.name
+        store_name: st.name,
+        player_count: count(etp.id, :distinct)
       }
     )
     |> Repo.all()

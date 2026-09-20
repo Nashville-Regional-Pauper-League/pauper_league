@@ -9,6 +9,9 @@
     <:col :let={event} label="Season">
       {event.season_name}
     </:col>
+    <:col :let={event} label="Players">
+      {event.player_count}
+    </:col>
     <:col :let={event}>
       <.link
         navigate={~p"/events/#{event.event_id}"}
