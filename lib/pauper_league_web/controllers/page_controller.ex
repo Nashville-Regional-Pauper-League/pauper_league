@@ -5,7 +5,7 @@ defmodule PauperLeagueWeb.PageController do
 
   @qualifier_list [
     %{store: "The Game Lodge", date: ~D[2026-10-24]},
-    %{store: "The Game Knight", date: ~D[2026-11-21]},
+    %{store: "Game Knight", date: ~D[2026-11-21]},
     %{store: "Infinity", date: ~D[2026-12-05]},
     %{store: "Middle Tennessee Gaming", date: "TBD"}
   ]
