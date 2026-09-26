@@ -12,64 +12,27 @@
       Weekly League Nights
     </h2>
 
-    <div class="flex flex-wrap gap-2 justify-evenly text-sm sm:text-base">
-      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[40vw] md:max-w-none md:px-8">
-        <img
-          class="mx-auto block object-contain h-28 w-40"
-          src="images/infinity-logo.png"
-          alt="Infinity Game Lounge Logo"
-        />
-
-        <h3 class="font-bold underline">Infinity <br />Game Lounge</h3>
-
-        <div>
-          <div>Mondays</div>
-          <strong>7:00 PM</strong>
-        </div>
-      </div>
-      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[40vw] md:max-w-none md:px-8">
-        <img
-          class="mx-auto block object-contain h-28 w-40"
-          src="images/game-lodge-logo.jpg"
-          alt="The Game Lodge Logo"
-        />
-
-        <h3 class="font-bold underline">The Game Lodge</h3>
-
-        <div>
-          <div>Tuesdays</div>
-          <strong>6:00 PM</strong>
-        </div>
-      </div>
-
-      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[40vw] md:max-w-none md:px-8">
-        <img
-          class="mx-auto block object-contain h-28 w-40"
-          src="images/game-knight-logo.png"
-          alt="Game Knight Logo"
-        />
-
-        <h3 class="font-bold underline">Game Knight</h3>
-
-        <div>
-          <div>Tuesdays</div>
-          <strong>6:00 PM</strong>
-        </div>
-      </div>
-      <div class="flex flex-col justify-between rounded-xl bg-white p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[40vw] md:max-w-none md:px-8">
-        <img
-          class="mx-auto block object-contain h-28 w-40"
-          src="images/mid-tn-gaming-logo.png"
-          alt="Middle TN Gaming Logo"
-        />
-
-        <h3 class="font-bold underline">Middle TN Gaming</h3>
-
-        <div>
-          <div>Thursdays</div>
-          <strong>7:00 PM</strong>
-        </div>
-      </div>
+    <div id="store-box" class="flex flex-wrap gap-2 justify-evenly text-sm sm:text-base">
+      <%= for store <- @store_list do %>
+        <.link navigate={store.url}>
+          <div class="flex flex-2 sm:flex-1 flex-col justify-between rounded-xl bg-white hover:bg-slate-100 p-4 text-center shadow-[0_5px_15px_rgba(0,0,0,0.12)] max-w-[40vw] md:max-w-none md:px-8">
+            <img
+              class="mx-auto block object-contain h-28 w-40"
+              src={store.logo}
+              alt="#{store.name} Logo"
+            />
+            <h3 class="font-bold underline">{store.store}</h3>
+            <div>
+              <div>{store.league_night.day}</div>
+              <strong>{store.league_night.time}</strong>
+            </div>
+            <div>
+              <div>{store.address.line_1}</div>
+              <div>{store.address.line_2}</div>
+            </div>
+          </div>
+        </.link>
+      <% end %>
     </div>
   </div>
 </section>

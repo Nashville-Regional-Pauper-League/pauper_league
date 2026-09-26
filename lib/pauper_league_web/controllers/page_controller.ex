@@ -10,9 +10,41 @@ defmodule PauperLeagueWeb.PageController do
     %{store: "Middle Tennessee Gaming", date: "TBD"}
   ]
 
+  @store_list [
+    %{
+      store: "Infinity Game Lounge",
+      league_night: %{day: "Mondays", time: "7:00 PM"},
+      address: %{line_1: "2051 Fort Campbell Blvd", line_2: "Clarksville, TN 37042"},
+      logo: "images/infinity-logo.png",
+      url: "https://igl2.infinitygamelounge.com"
+    },
+    %{
+      store: "The Game Lodge",
+      league_night: %{day: "Tuesdays", time: "6:00 PM"},
+      address: %{line_1: "1123 N Castle Heights Ave", line_2: "Lebanon, TN 37087"},
+      logo: "images/game-lodge-logo.jpg",
+      url: "https://thegamelodge.store"
+    },
+    %{
+      store: "Game Knight",
+      league_night: %{day: "Tuesdays", time: "6:00 PM"},
+      address: %{line_1: "119 Nashville Hwy #117", line_2: "Columbia, TN 38401"},
+      logo: "images/game-knight-logo.png",
+      url: "https://gameknighttn.com"
+    },
+    %{
+      store: "Middle TN Gaming",
+      league_night: %{day: "Thursdays", time: "7:00 PM"},
+      address: %{line_1: "7648 Hwy 70 S #20", line_2: "Nashville, TN 37221"},
+      logo: "images/mid-tn-gaming-logo.png",
+      url: "https://middletennesseegaming.com"
+    }
+  ]
+
   def home(conn, _params) do
     conn
     |> assign(:qualifiers, @qualifier_list)
+    |> assign(:store_list, @store_list)
     |> render(:home)
   end
 
