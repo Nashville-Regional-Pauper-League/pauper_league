@@ -4,10 +4,18 @@ defmodule PauperLeagueWeb.PageController do
   import Ecto.Query
 
   @qualifier_list [
-    %{store: "The Game Lodge", date: ~D[2026-10-24]},
-    %{store: "Game Knight", date: ~D[2026-11-21]},
-    %{store: "Infinity", date: ~D[2026-12-05]},
-    %{store: "Middle Tennessee Gaming", date: "TBD"}
+    %{
+      store: "The Game Lodge",
+      url: nil,
+      date: ~D[2026-10-24]
+    },
+    %{
+      store: "Game Knight",
+      url: "https://topdeck.gg/event/pauper-open-qualifier",
+      date: ~D[2026-11-21]
+    },
+    %{store: "Infinity", url: nil, date: ~D[2026-12-05]},
+    %{store: "Middle Tennessee Gaming", url: nil, date: "TBD"}
   ]
 
   @store_list [

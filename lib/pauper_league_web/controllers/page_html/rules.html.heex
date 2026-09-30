@@ -11,6 +11,15 @@
   <div class="overflow-hidden mt-4 rounded-2xl shadow-lg ring-1 ring-white/10">
     <.table id="event_list" rows={@qualifiers}>
       <:col :let={e} label="Store">{e.store}</:col>
+      <:col :let={e} label="">
+        <%= if not is_nil(e.url) do %>
+          <.link class="text-blue-600 underline hover:text-blue-800" navigate={e.url}>
+            Event Page
+          </.link>
+        <% else %>
+          TBD
+        <% end %>
+      </:col>
       <:col :let={e} label="Date">{e.date}</:col>
     </.table>
   </div>
