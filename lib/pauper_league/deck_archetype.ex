@@ -135,7 +135,7 @@ defmodule PauperLeague.DeckArchetype do
     )
     |> Repo.all()
     |> Enum.filter(fn sp -> sp.matches > 5 end)
-    |> Enum.sort_by(fn sp -> sp.match_wins / sp.matches end, :desc)
+    |> Enum.sort_by(fn sp -> [sp.matches, sp.match_wins / sp.matches] end, :desc)
     |> Enum.map(fn sp ->
       sp
       |> Map.put(
