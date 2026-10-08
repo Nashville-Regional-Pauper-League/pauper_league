@@ -1,14 +1,14 @@
 defmodule PauperLeague.GraphQL do
   def refresh_token_query do
     """
-    query refreshToken($refreshToken: String!) {
-      refreshToken(refreshToken: $refreshToken) {
+    query refreshToken($refreshToken: String!, $provider: AuthProvider) {
+      refreshToken(refreshToken: $refreshToken, provider: $provider) {
         access_token
         refresh_token
         expires_in
         persona_id
         display_name
-        __typename
+        email_verified
       }
     }
     """

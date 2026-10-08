@@ -63,7 +63,8 @@ defmodule PauperLeague.EventlinkApi do
     %{
       operationName: "refreshToken",
       variables: %{
-        refreshToken: access_token.refresh_token
+        refreshToken: access_token.refresh_token,
+        provider: "auth0"
       },
       query: PauperLeague.GraphQL.refresh_token_query()
     }
