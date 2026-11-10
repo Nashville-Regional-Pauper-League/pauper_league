@@ -15,7 +15,7 @@ defmodule PauperLeagueWeb.PageController do
       date: ~D[2026-11-21]
     },
     %{store: "Infinity", url: nil, date: ~D[2026-12-05]},
-    %{store: "Middle Tennessee Gaming", url: nil, date: "TBD"}
+    %{store: "Middle Tennessee Gaming", url: nil, date: ~D[2026-12-12]}
   ]
 
   @store_list [
