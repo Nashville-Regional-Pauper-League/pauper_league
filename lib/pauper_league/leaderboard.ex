@@ -153,10 +153,10 @@ defmodule PauperLeague.Leaderboard do
   def get_store_attendance(season_id) do
     month_subquery =
       from(b in subquery(base_leaderboard_query(season_id)),
-        where: b.matches == 3,
         select: %{
           player_id: b.player_id,
           event_id: b.event_id,
+          match_count: b.matches,
           month:
             fragment(
               """
@@ -186,15 +186,18 @@ defmodule PauperLeague.Leaderboard do
             fragment(
               """
                 case
-                  when count(distinct ?) = 4 then 3
-                  when count(distinct ?) = 3 then 2
-                  when count(distinct ?) = 2 then 1
+                  when count(distinct ?) filter (where ? = 3) = 4 then 3
+                  when count(distinct ?) filter (where ? = 3) = 3 then 2
+                  when count(distinct ?) filter (where ? = 3) = 2 then 1
                   else 0
                 end
               """,
               months.store_id,
+              months.match_count,
               months.store_id,
-              months.store_id
+              months.match_count,
+              months.store_id,
+              months.match_count
             )
         }
       )

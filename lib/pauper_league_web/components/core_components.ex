@@ -479,7 +479,7 @@ defmodule PauperLeagueWeb.CoreComponents do
       <table class={"#{@set_width}"}>
         <thead class={"#{@scrollable && "sticky pt-2 top-0 z-40"} bg-[#a59e8e] text-left leading-6"}>
           <tr>
-            <th :for={col <- @col} class="pt-2 pl-4 pb-4 pr-6 font-bold">{col[:label]}</th>
+            <th :for={col <- @col} class="pt-2 pl-2 pb-4 pr-6 font-bold">{col[:label]}</th>
             <th :if={@action != []} class="relative p-0 pb-4">
               <span class="sr-only">{gettext("Actions")}</span>
             </th>
@@ -494,7 +494,7 @@ defmodule PauperLeagueWeb.CoreComponents do
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
-              class={["relative px-2", @row_click && "hover:cursor-pointer"]}
+              class={["relative pl-2", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
                 <span class="absolute -inset-y-px right-0 group-hover:bg-zinc-50 sm:rounded-l-xl" />
