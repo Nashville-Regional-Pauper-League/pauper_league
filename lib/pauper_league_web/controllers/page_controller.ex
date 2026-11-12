@@ -6,7 +6,7 @@ defmodule PauperLeagueWeb.PageController do
   @qualifier_list [
     %{
       store: "The Game Lodge",
-      url: nil,
+      url: "https://topdeck.gg/bracket/pauper-regional-qualifier#metagame",
       date: ~D[2026-10-24]
     },
     %{
